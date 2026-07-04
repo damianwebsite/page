@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en" x-data="{
+  dark: localStorage.getItem('theme')==='dark'||(!localStorage.getItem('theme')&&window.matchMedia('(prefers-color-scheme: dark)').matches),
+  scrolled: false,
+  mobileMenu: false
+}" :class="{'dark':dark}" x-init="
+  $watch('dark', v => localStorage.setItem('theme', v ? 'dark' : 'light'));
+  window.addEventListener('scroll', () => { scrolled = window.scrollY > 20; }, { passive: true });
+" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Damian Boer — CV. Plant Scientist, Science Communicator, Photographer, and Creative Coder."/>
+  <meta name="author" content="Damian Boer"/>
+  <title>CV — Damian Boer</title>
+
+  <!-- Tailwind + Alpine -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  <!-- Google Fonts: Space Grotesk + Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Space Grotesk', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          },
+          colors: {
+            accent: '#2D6A4F',
+            'accent-light': '#409F7A',
+            'accent-muted': '#95B8A7',
+            'forest-dark': '#1B3B2F',
+            'forest-light': '#E6F0EA',
+            'moss': '#7A9E7E'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    *,*::before,*::after{box-sizing:border-box;}
+    html,body{font-family:'Inter',sans-serif;background-color:#f5f9f6;transition:background-color .3s,color .3s;}
+    h1,h2,h3,h4,h5,h6{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:-0.02em;}
+
+    /* Dark mode overrides */
+    .dark body{background-color:#121a15;}
+    .dark .bg-white{background-color:#1e2a23;}
+    .dark .bg-zinc-50{background-color:#1a261f;}
+    .dark .border-zinc-100{border-color:#2a3a30;}
+    .dark .border-zinc-200{border-color:#2a3a30;}
+    .dark .text-zinc-500{color:#a0b8aa;}
+    .dark .text-zinc-400{color:#8aa898;}
+    .dark .bg-zinc-100{background-color:#2a3a30;}
+
+    /* Noise overlay */
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.12;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");}
+
+    /* Scrollbar - Forest Green */
+    ::-webkit-scrollbar{width:5px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    ::-webkit-scrollbar-thumb{background:#2D6A4F;border-radius:99px;}
+    ::-webkit-scrollbar-thumb:hover{background:#409F7A;}
+    .dark ::-webkit-scrollbar-thumb{background:#409F7A;}
+    .dark ::-webkit-scrollbar-thumb:hover{background:#52B388;}
+    *{scrollbar-width:thin;scrollbar-color:#2D6A4F transparent;}
+    .dark *{scrollbar-color:#409F7A transparent;}
+
+    /* Nav underline */
+    .nl{position:relative;}
+    .nl::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:currentColor;transition:width .22s cubic-bezier(.4,0,.2,1);}
+    .nl:hover::after{width:100%;}
+    .nl.on{font-weight:600;}
+
+    /* Shimmer button */
+    .shimmer{position:relative;overflow:hidden;}
+    .shimmer::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:rgba(255,255,255,.18);transform:skewX(-20deg);transition:left .4s cubic-bezier(.4,0,.2,1);}
+    .shimmer:hover::after{left:160%;}
+
+    [x-cloak]{display:none!important;}
+
+    /* Reveal */
+    .reveal{opacity:0;transform:translateY(22px);transition:opacity .55s cubic-bezier(.4,0,.2,1),transform .55s cubic-bezier(.4,0,.2,1);}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+    .d1{transition-delay:.07s}.d2{transition-delay:.14s}.d3{transition-delay:.21s}.d4{transition-delay:.28s}
+
+    /* Timeline dot */
+    .timeline-dot{width:12px;height:12px;min-width:12px;border-radius:50%;background:#2D6A4F;border:2px solid #e6f0ea;margin-top:6px;}
+    .dark .timeline-dot{border-color:#1a261f;}
+    .timeline-line{border-left:2px solid #d4d8d0;}
+    .dark .timeline-line{border-left-color:#2a3a30;}
+
+    /* Publication card */
+    .pub-card{transition:border-color .2s;}
+    .pub-card:hover{border-color:#2D6A4F;}
+    .pub-doi{font-size:.7rem;color:#6a8a7a;}
+    .dark .pub-doi{color:#6a8a7a;}
+  </style>
+</head>
+
+<body class="bg-[#f5f9f6] dark:bg-[#121a15] text-zinc-800 dark:text-zinc-100 font-body antialiased">
+
+  <!-- ═══ NAV ═══ -->
+  <header class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
+    :class="scrolled ? 'bg-white/90 dark:bg-[#121a15]/90 backdrop-blur-md shadow-sm shadow-black/5' : 'bg-transparent'">
+    <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between" aria-label="Main navigation">
+      <a href="index.html" class="font-display font-bold text-xl tracking-tight z-10">
+        <span class="text-zinc-900 dark:text-white">Damian </span><span class="text-accent">Boer</span>
+      </a>
+      <ul class="hidden md:flex items-center gap-8 text-sm font-medium" role="list">
+        <li><a href="index.html#services" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Experience</a></li>
+        <li><a href="projects.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Work</a></li>
+        <li><a href="index.html#about" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">About</a></li>
+        <li><a href="cv.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors on !text-zinc-900 dark:!text-white">CV</a></li>
+        <li><a href="index.html#contact" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Contact</a></li>
+      </ul>
+      <div class="flex items-center gap-3">
+        <button @click="dark=!dark" class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" :aria-label="dark ? 'Light mode' : 'Dark mode'">
+          <svg x-show="!dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+          <svg x-show="dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+        </button>
+        <a href="index.html#contact" class="hidden md:inline-flex items-center gap-2 shimmer bg-accent text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-accent-light transition-colors">
+          Contact me <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+        <button @click="mobileMenu=!mobileMenu" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700" aria-label="Toggle menu">
+          <svg x-show="!mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg x-show="mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+    </nav>
+    <div x-show="mobileMenu" x-cloak
+      x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+      x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2"
+      class="md:hidden bg-white dark:bg-[#121a15] border-t border-zinc-100 dark:border-zinc-800">
+      <ul class="flex flex-col px-6 py-5 gap-4 text-sm font-medium" role="list">
+        <li><a href="index.html#services" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Experience</a></li>
+        <li><a href="projects.html" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Work</a></li>
+        <li><a href="index.html#about" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">About</a></li>
+        <li><a href="cv.html" @click="mobileMenu=false" class="block text-accent font-medium">CV</a></li>
+        <li><a href="index.html#contact" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Contact</a></li>
+        <li class="pt-2 border-t border-zinc-100 dark:border-zinc-800">
+          <a href="index.html#contact" @click="mobileMenu=false" class="inline-flex shimmer bg-accent text-white font-semibold text-sm px-5 py-2.5 rounded-full">Contact me →</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ═══ HERO ═══ -->
+    <section class="pt-32 pb-12 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute bottom-0 left-0 w-60 h-60 bg-[#7A9E7E]/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="max-w-4xl mx-auto px-6 relative z-10">
+        <p class="reveal text-xs font-semibold text-accent dark:text-accent-light tracking-widest uppercase mb-3">Curriculum Vitae</p>
+        <h1 class="reveal font-display font-bold text-5xl md:text-6xl text-zinc-900 dark:text-white leading-tight mb-4">Damian Boer</h1>
+        <p class="reveal d1 text-lg text-zinc-500 dark:text-zinc-400 leading-relaxed max-w-2xl">
+          Plant Scientist • Science Communicator • Photographer • Creative Coder
+        </p>
+        <div class="reveal d2 flex flex-wrap gap-4 mt-6">
+          <a href="#publications" class="inline-flex items-center gap-2 shimmer bg-accent text-white font-semibold px-6 py-2.5 rounded-full text-sm hover:bg-accent-light transition-colors">
+            View Publications
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </a>
+          <a href="#experience" class="inline-flex items-center gap-2 border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 font-semibold px-6 py-2.5 rounded-full text-sm hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">
+            View Experience
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ QUICK STATS ═══ -->
+    <section class="pb-12">
+      <div class="max-w-4xl mx-auto px-6">
+        <div class="reveal grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-5 text-center border border-zinc-100 dark:border-zinc-700">
+            <p class="font-display font-bold text-3xl text-accent">8+</p>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Years Experience</p>
+          </div>
+          <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-5 text-center border border-zinc-100 dark:border-zinc-700">
+            <p class="font-display font-bold text-3xl text-accent">7</p>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Publications</p>
+          </div>
+          <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-5 text-center border border-zinc-100 dark:border-zinc-700">
+            <p class="font-display font-bold text-3xl text-accent">12+</p>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Workshops Delivered</p>
+          </div>
+          <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-5 text-center border border-zinc-100 dark:border-zinc-700">
+            <p class="font-display font-bold text-3xl text-accent">5</p>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Exhibitions</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ EXPERIENCE ═══ -->
+    <section id="experience" class="py-12 bg-[#edf3ef] dark:bg-[#1a261f]">
+      <div class="max-w-4xl mx-auto px-6">
+        <div class="mb-10">
+          <p class="reveal text-xs font-semibold text-accent dark:text-accent-light tracking-widest uppercase mb-2">Career</p>
+          <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">Experience</h2>
+        </div>
+
+        <div class="relative pl-8 timeline-line">
+          <!-- Item 1 -->
+          <div class="reveal d1 relative mb-10">
+            <div class="timeline-dot absolute -left-[33px] top-1"></div>
+            <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
+              <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
+                <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white">PhD Candidate — Plant Sciences</h3>
+                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2020–2024</span>
+              </div>
+              <p class="text-sm text-accent font-medium mb-2">Wageningen University &amp; Research</p>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Research on plant physiology, (epi)genetics, and stress responses. Combined lab work with computational analyses to understand mechanisms of plant adaptation to environmental stress.</p>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="reveal d2 relative mb-10">
+            <div class="timeline-dot absolute -left-[33px] top-1"></div>
+            <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
+              <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
+                <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white">Founder — GeneSprout Initiative</h3>
+                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2016–Present</span>
+              </div>
+              <p class="text-sm text-accent font-medium mb-2">Non-profit Science Communication</p>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Founded a non-profit organization to enable open dialogue about genetic editing and plant science. Developed workshops, educational materials, and exhibitions reaching 340+ participants across 8 schools.</p>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="reveal d3 relative mb-10">
+            <div class="timeline-dot absolute -left-[33px] top-1"></div>
+            <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
+              <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
+                <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white">Research Assistant — Plant Virology</h3>
+                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2018–2020</span>
+              </div>
+              <p class="text-sm text-accent font-medium mb-2">Plant Research International</p>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Investigated plant-virus interactions and developed novel detection methods. Contributed to three publications on viral resistance mechanisms.</p>
+            </div>
+          </div>
+
+          <!-- Item 4 -->
+          <div class="reveal d4 relative">
+            <div class="timeline-dot absolute -left-[33px] top-1"></div>
+            <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
+              <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
+                <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white">Science Communication Lead</h3>
+                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2022–2024</span>
+              </div>
+              <p class="text-sm text-accent font-medium mb-2">Various Institutions</p>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Developed and delivered science communication workshops for scientists and educators. Created accessible content bridging plant science and public understanding.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ EDUCATION ═══ -->
+    <section class="py-12 bg-[#f5f9f6] dark:bg-[#121a15]">
+      <div class="max-w-4xl mx-auto px-6">
+        <div class="mb-10">
+          <p class="reveal text-xs font-semibold text-accent dark:text-accent-light tracking-widest uppercase mb-2">Education</p>
+          <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">Education</h2>
+        </div>
+
+        <div class="space-y-4">
+          <div class="reveal d1 bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white">PhD in Plant Sciences</h3>
+              <p class="text-sm text-accent">Wageningen University &amp; Research</p>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Thesis: "Epigenetic regulation of stress responses in plants"</p>
+            </div>
+            <span class="text-xs font-medium bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">2020–2024</span>
+          </div>
+
+          <div class="reveal d2 bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white">MSc in Plant Biotechnology</h3>
+              <p class="text-sm text-accent">Utrecht University</p>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Specialization: Molecular Plant Physiology</p>
+            </div>
+            <span class="text-xs font-medium bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">2016–2018</span>
+          </div>
+
+          <div class="reveal d3 bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white">BSc in Biology</h3>
+              <p class="text-sm text-accent">University of Amsterdam</p>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Minor: Science Communication</p>
+            </div>
+            <span class="text-xs font-medium bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">2013–2016</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SKILLS ═══ -->
+    <section class="py-12 bg-[#edf3ef] dark:bg-[#1a261f]">
+      <div class="max-w-4xl mx-auto px-6">
+        <div class="mb-10">
+          <p class="reveal text-xs font-semibold text-accent dark:text-accent-light tracking-widest uppercase mb-2">Expertise</p>
+          <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">Skills</h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="reveal d1 bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
+            <h3 class="font-display font-bold text-base text-zinc-900 dark:text-white mb-3">Research &amp; Lab</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Molecular Biology</span>
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Plant Physiology</span>
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Genetics</span>
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Virology</span>
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Epigenetics</span>
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Bioinformatics</span>
+            </div>
+          </div>
+
+          <div class="reveal d2 bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
+            <h3 class="font-display font-bold text-base text-zinc-900 dark:text-white mb-3">Creative &amp; Technical</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Photography</span>
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Creative Coding</span>
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Generative Art</span>
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Web Development</span>
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Data Visualization</span>
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Pen Plotting</span>
+            </div>
+          </div>
+
+          <div class="reveal d3 bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
+            <h3 class="font-display font-bold text-base text-zinc-900 dark:text-white mb-3">Languages</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Dutch (Native)</span>
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">English (Fluent)</span>
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">German (Conversational)</span>
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">French (Intermediate)</span>
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Spanish (Learning)</span>
+            </div>
+          </div>
+
+          <div class="reveal d4 bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
+            <h3 class="font-display font-bold text-base text-zinc-900 dark:text-white mb-3">Science Communication</h3>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Workshop Facilitation</span>
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Public Speaking</span>
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Educational Design</span>
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Writing</span>
+              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Outreach</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ SCIENTIFIC PUBLICATIONS ═══ -->
+    <section id="publications" class="py-12 bg-[#f5f9f6] dark:bg-[#121a15]">
+      <div class="max-w-4xl mx-auto px-6">
+        <div class="mb-10">
+          <p class="reveal text-xs font-semibold text-accent dark:text-accent-light tracking-widest uppercase mb-2">Research</p>
+          <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">Scientific Publications</h2>
+          <p class="reveal d2 text-zinc-500 dark:text-zinc-400 mt-2">Peer-reviewed articles and book chapters</p>
+        </div>
+
+        <div class="space-y-4">
+          <!-- Publication 1 -->
+          <div class="reveal d1 pub-card bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors">
+            <div class="flex flex-wrap items-start gap-2 mb-2">
+              <span class="text-xs font-semibold text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2024</span>
+              <span class="text-xs bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">Journal Article</span>
+            </div>
+            <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2">Epigenetic regulation of drought tolerance in Arabidopsis thaliana</h3>
+            <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed mb-2">
+              Boer, D., van der Meer, I., &amp; de Wit, M. (2024). <em>Plant Physiology</em>, 194(3), 1567-
