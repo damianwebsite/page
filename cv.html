@@ -202,14 +202,17 @@
       </div>
     </section>
 
-<!-- ═══ CATEGORY ACCORDION SECTIONS ═══ -->
+<!-- ═══ CATEGORY ACCORDION SECTIONS (Hover + Click) ═══ -->
 <section class="py-6">
   <div class="max-w-5xl mx-auto px-6">
     <div class="reveal space-y-3">
       
       <!-- Research Section -->
-      <div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden">
-        <button @click="openSection = openSection === 'research' ? null : 'research'" class="w-full flex items-center justify-between p-5 text-left hover:bg-[#e6f0ea]/50 dark:hover:bg-zinc-800/30 transition-colors">
+      <div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden" 
+           x-data="{ open: false }" 
+           @mouseenter="open = true" 
+           @mouseleave="open = false">
+        <button @click="open = !open" class="w-full flex items-center justify-between p-5 text-left hover:bg-[#e6f0ea]/50 dark:hover:bg-zinc-800/30 transition-colors cursor-pointer">
           <div class="flex items-center gap-3">
             <div class="w-8 h-8 bg-[#e6f0ea] dark:bg-zinc-800 rounded-lg flex items-center justify-center">
               <svg class="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -219,11 +222,11 @@
             <span class="font-display font-bold text-lg text-zinc-900 dark:text-white">Research</span>
             <span class="text-xs text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-2.5 py-0.5 rounded-full">6 entries</span>
           </div>
-          <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="openSection === 'research' ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
           </svg>
         </button>
-        <div x-show="openSection === 'research'" x-collapse>
+        <div x-show="open" x-collapse>
           <div class="px-5 pb-5 space-y-4">
             <!-- PhD -->
             <div class="border-l-2 border-accent pl-4">
@@ -308,8 +311,11 @@
       </div>
 
       <!-- Science Communication Section -->
-      <div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden">
-        <button @click="openSection = openSection === 'scicomm' ? null : 'scicomm'" class="w-full flex items-center justify-between p-5 text-left hover:bg-[#e6f0ea]/50 dark:hover:bg-zinc-800/30 transition-colors">
+      <div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden"
+           x-data="{ open: false }"
+           @mouseenter="open = true"
+           @mouseleave="open = false">
+        <button @click="open = !open" class="w-full flex items-center justify-between p-5 text-left hover:bg-[#e6f0ea]/50 dark:hover:bg-zinc-800/30 transition-colors cursor-pointer">
           <div class="flex items-center gap-3">
             <div class="w-8 h-8 bg-[#e6f0ea] dark:bg-zinc-800 rounded-lg flex items-center justify-center">
               <svg class="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -319,11 +325,11 @@
             <span class="font-display font-bold text-lg text-zinc-900 dark:text-white">Science Communication</span>
             <span class="text-xs text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-2.5 py-0.5 rounded-full">2 entries</span>
           </div>
-          <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="openSection === 'scicomm' ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
           </svg>
         </button>
-        <div x-show="openSection === 'scicomm'" x-collapse>
+        <div x-show="open" x-collapse>
           <div class="px-5 pb-5 space-y-4">
             <div class="border-l-2 border-accent pl-4">
               <div class="flex flex-wrap items-start justify-between gap-2">
@@ -351,8 +357,11 @@
       </div>
 
       <!-- Visual Arts Section -->
-      <div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden">
-        <button @click="openSection = openSection === 'visualarts' ? null : 'visualarts'" class="w-full flex items-center justify-between p-5 text-left hover:bg-[#e6f0ea]/50 dark:hover:bg-zinc-800/30 transition-colors">
+      <div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden"
+           x-data="{ open: false }"
+           @mouseenter="open = true"
+           @mouseleave="open = false">
+        <button @click="open = !open" class="w-full flex items-center justify-between p-5 text-left hover:bg-[#e6f0ea]/50 dark:hover:bg-zinc-800/30 transition-colors cursor-pointer">
           <div class="flex items-center gap-3">
             <div class="w-8 h-8 bg-[#e6f0ea] dark:bg-zinc-800 rounded-lg flex items-center justify-center">
               <svg class="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -363,11 +372,11 @@
             <span class="font-display font-bold text-lg text-zinc-900 dark:text-white">Visual Arts</span>
             <span class="text-xs text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-2.5 py-0.5 rounded-full">2 entries</span>
           </div>
-          <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="openSection === 'visualarts' ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
           </svg>
         </button>
-        <div x-show="openSection === 'visualarts'" x-collapse>
+        <div x-show="open" x-collapse>
           <div class="px-5 pb-5 space-y-4">
             <div class="border-l-2 border-accent pl-4">
               <div class="flex flex-wrap items-start justify-between gap-2">
@@ -390,8 +399,11 @@
       </div>
 
       <!-- Teaching & Coaching Section -->
-      <div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden">
-        <button @click="openSection = openSection === 'teaching' ? null : 'teaching'" class="w-full flex items-center justify-between p-5 text-left hover:bg-[#e6f0ea]/50 dark:hover:bg-zinc-800/30 transition-colors">
+      <div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden"
+           x-data="{ open: false }"
+           @mouseenter="open = true"
+           @mouseleave="open = false">
+        <button @click="open = !open" class="w-full flex items-center justify-between p-5 text-left hover:bg-[#e6f0ea]/50 dark:hover:bg-zinc-800/30 transition-colors cursor-pointer">
           <div class="flex items-center gap-3">
             <div class="w-8 h-8 bg-[#e6f0ea] dark:bg-zinc-800 rounded-lg flex items-center justify-center">
               <svg class="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -401,11 +413,11 @@
             <span class="font-display font-bold text-lg text-zinc-900 dark:text-white">Teaching &amp; Coaching</span>
             <span class="text-xs text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-2.5 py-0.5 rounded-full">2 entries</span>
           </div>
-          <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="openSection === 'teaching' ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
           </svg>
         </button>
-        <div x-show="openSection === 'teaching'" x-collapse>
+        <div x-show="open" x-collapse>
           <div class="px-5 pb-5 space-y-4">
             <div class="border-l-2 border-accent pl-4">
               <div class="flex flex-wrap items-start justify-between gap-2">
@@ -428,8 +440,11 @@
       </div>
 
       <!-- Awards Section -->
-      <div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden">
-        <button @click="openSection = openSection === 'awards' ? null : 'awards'" class="w-full flex items-center justify-between p-5 text-left hover:bg-[#e6f0ea]/50 dark:hover:bg-zinc-800/30 transition-colors">
+      <div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden"
+           x-data="{ open: false }"
+           @mouseenter="open = true"
+           @mouseleave="open = false">
+        <button @click="open = !open" class="w-full flex items-center justify-between p-5 text-left hover:bg-[#e6f0ea]/50 dark:hover:bg-zinc-800/30 transition-colors cursor-pointer">
           <div class="flex items-center gap-3">
             <div class="w-8 h-8 bg-[#e6f0ea] dark:bg-zinc-800 rounded-lg flex items-center justify-center">
               <svg class="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -439,11 +454,11 @@
             <span class="font-display font-bold text-lg text-zinc-900 dark:text-white">Awards</span>
             <span class="text-xs text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-2.5 py-0.5 rounded-full">4 entries</span>
           </div>
-          <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="openSection === 'awards' ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
           </svg>
         </button>
-        <div x-show="openSection === 'awards'" x-collapse>
+        <div x-show="open" x-collapse>
           <div class="px-5 pb-5">
             <div class="grid md:grid-cols-2 gap-3">
               <div class="border-l-2 border-accent pl-4">
