@@ -2,7 +2,9 @@
 <html lang="en" x-data="{
   dark: localStorage.getItem('theme')==='dark'||(!localStorage.getItem('theme')&&window.matchMedia('(prefers-color-scheme: dark)').matches),
   scrolled: false,
-  mobileMenu: false
+  mobileMenu: false,
+  activeTab: 'research',
+  openSection: null
 }" :class="{'dark':dark}" x-init="
   $watch('dark', v => localStorage.setItem('theme', v ? 'dark' : 'light'));
   window.addEventListener('scroll', () => { scrolled = window.scrollY > 20; }, { passive: true });
@@ -18,7 +20,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-  <!-- Google Fonts: Space Grotesk + Inter -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
@@ -50,7 +52,7 @@
     html,body{font-family:'Inter',sans-serif;background-color:#f5f9f6;transition:background-color .3s,color .3s;}
     h1,h2,h3,h4,h5,h6{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:-0.02em;}
 
-    /* Dark mode overrides */
+    /* Dark mode */
     .dark body{background-color:#121a15;}
     .dark .bg-white{background-color:#1e2a23;}
     .dark .bg-zinc-50{background-color:#1a261f;}
@@ -63,7 +65,7 @@
     /* Noise overlay */
     body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.12;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");}
 
-    /* Scrollbar - Forest Green */
+    /* Scrollbar */
     ::-webkit-scrollbar{width:5px;}
     ::-webkit-scrollbar-track{background:transparent;}
     ::-webkit-scrollbar-thumb{background:#2D6A4F;border-radius:99px;}
@@ -79,7 +81,7 @@
     .nl:hover::after{width:100%;}
     .nl.on{font-weight:600;}
 
-    /* Shimmer button */
+    /* Shimmer */
     .shimmer{position:relative;overflow:hidden;}
     .shimmer::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:rgba(255,255,255,.18);transform:skewX(-20deg);transition:left .4s cubic-bezier(.4,0,.2,1);}
     .shimmer:hover::after{left:160%;}
@@ -89,17 +91,29 @@
     /* Reveal */
     .reveal{opacity:0;transform:translateY(22px);transition:opacity .55s cubic-bezier(.4,0,.2,1),transform .55s cubic-bezier(.4,0,.2,1);}
     .reveal.visible{opacity:1;transform:translateY(0);}
-    .d1{transition-delay:.07s}.d2{transition-delay:.14s}.d3{transition-delay:.21s}.d4{transition-delay:.28s}.d5{transition-delay:.35s}.d6{transition-delay:.42s}
+    .d1{transition-delay:.07s}.d2{transition-delay:.14s}.d3{transition-delay:.21s}.d4{transition-delay:.28s}
 
-    /* Timeline dot */
-    .timeline-dot{width:12px;height:12px;min-width:12px;border-radius:50%;background:#2D6A4F;border:2px solid #e6f0ea;margin-top:6px;}
-    .dark .timeline-dot{border-color:#1a261f;}
-    .timeline-line{border-left:2px solid #d4d8d0;}
-    .dark .timeline-line{border-left-color:#2a3a30;}
+    /* Tab buttons */
+    .tab-btn{transition:all .2s ease;}
+    .tab-btn.active{background:#2D6A4F;color:white;border-color:#2D6A4F;}
+    .dark .tab-btn.active{background:#409F7A;border-color:#409F7A;}
+    .tab-btn:not(.active):hover{background:#e6f0ea;border-color:#95b8a7;}
+    .dark .tab-btn:not(.active):hover{background:#2a3a30;border-color:#3a4a40;}
 
-    /* Publication card */
-    .pub-card{transition:border-color .2s;}
-    .pub-card:hover{border-color:#2D6A4F;}
+    /* Accordion */
+    .accordion-item{border-bottom:1px solid #e4e7e5;}
+    .dark .accordion-item{border-bottom-color:#2a3a30;}
+    .accordion-item:last-child{border-bottom:none;}
+
+    /* Award card */
+    .award-card{transition:transform .28s cubic-bezier(.4,0,.2,1),border-color .18s;}
+    .award-card:hover{transform:translateY(-3px);border-color:#2D6A4F;}
+
+    /* Timeline dots */
+    .timeline-dot-sm{width:10px;height:10px;min-width:10px;border-radius:50%;background:#2D6A4F;border:2px solid #e6f0ea;margin-top:4px;}
+    .dark .timeline-dot-sm{border-color:#1a261f;}
+    .timeline-line-sm{border-left:2px solid #d4d8d0;}
+    .dark .timeline-line-sm{border-left-color:#2a3a30;}
   </style>
 </head>
 
@@ -108,11 +122,11 @@
   <!-- ═══ NAV ═══ -->
   <header class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
     :class="scrolled ? 'bg-white/90 dark:bg-[#121a15]/90 backdrop-blur-md shadow-sm shadow-black/5' : 'bg-transparent'">
-    <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between" aria-label="Main navigation">
+    <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
       <a href="index.html" class="font-display font-bold text-xl tracking-tight z-10">
         <span class="text-zinc-900 dark:text-white">Damian </span><span class="text-accent">Boer</span>
       </a>
-      <ul class="hidden md:flex items-center gap-8 text-sm font-medium" role="list">
+      <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
         <li><a href="index.html#services" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Experience</a></li>
         <li><a href="projects.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Work</a></li>
         <li><a href="index.html#about" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">About</a></li>
@@ -120,14 +134,14 @@
         <li><a href="index.html#contact" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Contact</a></li>
       </ul>
       <div class="flex items-center gap-3">
-        <button @click="dark=!dark" class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" :aria-label="dark ? 'Light mode' : 'Dark mode'">
+        <button @click="dark=!dark" class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
           <svg x-show="!dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
           <svg x-show="dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
         </button>
         <a href="index.html#contact" class="hidden md:inline-flex items-center gap-2 shimmer bg-accent text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-accent-light transition-colors">
           Contact me <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
         </a>
-        <button @click="mobileMenu=!mobileMenu" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700" aria-label="Toggle menu">
+        <button @click="mobileMenu=!mobileMenu" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700">
           <svg x-show="!mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
           <svg x-show="mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
@@ -153,393 +167,339 @@
   <main>
 
     <!-- ═══ HERO ═══ -->
-    <section class="pt-32 pb-12 relative overflow-hidden">
+    <section class="pt-32 pb-8 relative overflow-hidden">
       <div class="absolute top-0 right-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none"></div>
       <div class="absolute bottom-0 left-0 w-60 h-60 bg-[#7A9E7E]/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="max-w-4xl mx-auto px-6 relative z-10">
+      <div class="max-w-5xl mx-auto px-6 relative z-10">
         <p class="reveal text-xs font-semibold text-accent dark:text-accent-light tracking-widest uppercase mb-3">Curriculum Vitae</p>
-        <h1 class="reveal font-display font-bold text-5xl md:text-6xl text-zinc-900 dark:text-white leading-tight mb-4">Damian Boer</h1>
-        <p class="reveal d1 text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed max-w-2xl">
+        <h1 class="reveal font-display font-bold text-5xl md:text-6xl text-zinc-900 dark:text-white leading-tight mb-2">Damian Boer</h1>
+        <p class="reveal d1 text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed">
           Plant Scientist • Science Communicator • Photographer • Creative Coder
         </p>
-        <div class="reveal d2 flex flex-wrap gap-4 mt-6">
-          <a href="#publications" class="inline-flex items-center gap-2 shimmer bg-accent text-white font-semibold px-6 py-2.5 rounded-full text-sm hover:bg-accent-light transition-colors">
-            View Publications
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-          </a>
-          <a href="#experience" class="inline-flex items-center gap-2 border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 font-semibold px-6 py-2.5 rounded-full text-sm hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">
-            View Experience
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ QUICK STATS ═══ -->
-    <section class="pb-12">
-      <div class="max-w-4xl mx-auto px-6">
-        <div class="reveal grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-5 text-center border border-zinc-100 dark:border-zinc-700">
-            <p class="font-display font-bold text-3xl text-accent">8+</p>
-            <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-1">Years Experience</p>
+        <!-- Quick stats -->
+        <div class="reveal d2 grid grid-cols-2 md:grid-cols-5 gap-3 mt-6">
+          <div class="bg-white dark:bg-[#1e2a23] rounded-xl p-3 text-center border border-zinc-100 dark:border-zinc-700">
+            <p class="font-display font-bold text-xl text-accent">8+</p>
+            <p class="text-[10px] text-zinc-500 dark:text-zinc-400">Years Experience</p>
           </div>
-          <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-5 text-center border border-zinc-100 dark:border-zinc-700">
-            <p class="font-display font-bold text-3xl text-accent">7</p>
-            <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-1">Publications</p>
+          <div class="bg-white dark:bg-[#1e2a23] rounded-xl p-3 text-center border border-zinc-100 dark:border-zinc-700">
+            <p class="font-display font-bold text-xl text-accent">7</p>
+            <p class="text-[10px] text-zinc-500 dark:text-zinc-400">Publications</p>
           </div>
-          <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-5 text-center border border-zinc-100 dark:border-zinc-700">
-            <p class="font-display font-bold text-3xl text-accent">12+</p>
-            <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-1">Workshops Delivered</p>
+          <div class="bg-white dark:bg-[#1e2a23] rounded-xl p-3 text-center border border-zinc-100 dark:border-zinc-700">
+            <p class="font-display font-bold text-xl text-accent">12+</p>
+            <p class="text-[10px] text-zinc-500 dark:text-zinc-400">Workshops</p>
           </div>
-          <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-5 text-center border border-zinc-100 dark:border-zinc-700">
-            <p class="font-display font-bold text-3xl text-accent">5</p>
-            <p class="text-xs text-zinc-600 dark:text-zinc-400 mt-1">Exhibitions</p>
+          <div class="bg-white dark:bg-[#1e2a23] rounded-xl p-3 text-center border border-zinc-100 dark:border-zinc-700">
+            <p class="font-display font-bold text-xl text-accent">5</p>
+            <p class="text-[10px] text-zinc-500 dark:text-zinc-400">Exhibitions</p>
+          </div>
+          <div class="bg-white dark:bg-[#1e2a23] rounded-xl p-3 text-center border border-zinc-100 dark:border-zinc-700">
+            <p class="font-display font-bold text-xl text-accent">4</p>
+            <p class="text-[10px] text-zinc-500 dark:text-zinc-400">Languages</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ═══ EXPERIENCE ═══ -->
-    <section id="experience" class="py-12 bg-[#edf3ef] dark:bg-[#1a261f]">
-      <div class="max-w-4xl mx-auto px-6">
-        <div class="mb-10">
-          <p class="reveal text-xs font-semibold text-accent dark:text-accent-light tracking-widest uppercase mb-2">Career</p>
-          <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">Experience</h2>
+    <!-- ═══ CATEGORY TABS ═══ -->
+    <section class="py-6">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="reveal flex flex-wrap gap-2 border-b border-zinc-200 dark:border-zinc-700 pb-4">
+          <button @click="activeTab = 'research'" :class="activeTab === 'research' ? 'active' : ''" class="tab-btn text-sm font-medium px-4 py-2 rounded-full border border-transparent transition-colors">
+            🔬 Research
+          </button>
+          <button @click="activeTab = 'scicomm'" :class="activeTab === 'scicomm' ? 'active' : ''" class="tab-btn text-sm font-medium px-4 py-2 rounded-full border border-transparent transition-colors">
+            🗣️ SciComm
+          </button>
+          <button @click="activeTab = 'visualarts'" :class="activeTab === 'visualarts' ? 'active' : ''" class="tab-btn text-sm font-medium px-4 py-2 rounded-full border border-transparent transition-colors">
+            📸 Visual Arts
+          </button>
+          <button @click="activeTab = 'teaching'" :class="activeTab === 'teaching' ? 'active' : ''" class="tab-btn text-sm font-medium px-4 py-2 rounded-full border border-transparent transition-colors">
+            🏋️ Teaching &amp; Coaching
+          </button>
+          <button @click="activeTab = 'awards'" :class="activeTab === 'awards' ? 'active' : ''" class="tab-btn text-sm font-medium px-4 py-2 rounded-full border border-transparent transition-colors">
+            🏆 Awards
+          </button>
         </div>
+      </div>
+    </section>
 
-        <div class="relative pl-8 timeline-line">
-          <!-- Item 1 -->
-          <div class="reveal d1 relative mb-10">
-            <div class="timeline-dot absolute -left-[33px] top-1"></div>
+    <!-- ═══ TAB CONTENT ═══ -->
+    <section class="py-6 pb-16">
+      <div class="max-w-5xl mx-auto px-6">
+
+        <!-- RESEARCH -->
+        <div x-show="activeTab === 'research'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+          <div class="space-y-4">
             <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
               <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
-                <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white">PhD Candidate — Plant Sciences</h3>
+                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white">PhD Candidate — Plant Sciences</h3>
                 <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2020–2024</span>
               </div>
               <p class="text-sm text-accent font-medium mb-2">Wageningen University &amp; Research</p>
-              <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">Research on plant physiology, (epi)genetics, and stress responses. Combined lab work with computational analyses to understand mechanisms of plant adaptation to environmental stress.</p>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Research on plant physiology, (epi)genetics, and stress responses. Combined lab work with computational analyses to understand mechanisms of plant adaptation to environmental stress.</p>
             </div>
-          </div>
 
-          <!-- Item 2 -->
-          <div class="reveal d2 relative mb-10">
-            <div class="timeline-dot absolute -left-[33px] top-1"></div>
             <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
               <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
-                <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white">Founder — GeneSprout Initiative</h3>
-                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2016–Present</span>
-              </div>
-              <p class="text-sm text-accent font-medium mb-2">Non-profit Science Communication</p>
-              <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">Founded a non-profit organization to enable open dialogue about genetic editing and plant science. Developed workshops, educational materials, and exhibitions reaching 340+ participants across 8 schools.</p>
-            </div>
-          </div>
-
-          <!-- Item 3 -->
-          <div class="reveal d3 relative mb-10">
-            <div class="timeline-dot absolute -left-[33px] top-1"></div>
-            <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
-              <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
-                <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white">Research Assistant — Plant Virology</h3>
+                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white">Research Assistant — Plant Virology</h3>
                 <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2018–2020</span>
               </div>
               <p class="text-sm text-accent font-medium mb-2">Plant Research International</p>
-              <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">Investigated plant-virus interactions and developed novel detection methods. Contributed to three publications on viral resistance mechanisms.</p>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Investigated plant-virus interactions and developed novel detection methods. Contributed to three publications on viral resistance mechanisms.</p>
             </div>
           </div>
+        </div>
 
-          <!-- Item 4 -->
-          <div class="reveal d4 relative">
-            <div class="timeline-dot absolute -left-[33px] top-1"></div>
+        <!-- SCIENCE COMMUNICATION -->
+        <div x-show="activeTab === 'scicomm'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+          <div class="space-y-4">
             <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
               <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
-                <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white">Science Communication Lead</h3>
+                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white">Founder — GeneSprout Initiative</h3>
+                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2016–Present</span>
+              </div>
+              <p class="text-sm text-accent font-medium mb-2">Non-profit Science Communication</p>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Founded a non-profit organization to enable open dialogue about genetic editing and plant science. Developed workshops, educational materials, and exhibitions reaching 340+ participants across 8 schools.</p>
+              <div class="flex flex-wrap gap-2 mt-3">
+                <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-2.5 py-1 rounded-full">12+ Workshops</span>
+                <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-2.5 py-1 rounded-full">340+ Participants</span>
+                <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-2.5 py-1 rounded-full">8 Schools</span>
+              </div>
+            </div>
+
+            <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
+              <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
+                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white">Science Communication Lead</h3>
                 <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2022–2024</span>
               </div>
               <p class="text-sm text-accent font-medium mb-2">Various Institutions</p>
-              <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">Developed and delivered science communication workshops for scientists and educators. Created accessible content bridging plant science and public understanding.</p>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Developed and delivered science communication workshops for scientists and educators. Created accessible content bridging plant science and public understanding.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- VISUAL ARTS -->
+        <div x-show="activeTab === 'visualarts'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+          <div class="space-y-4">
+            <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
+              <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
+                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white">Viral Art — Generative Installation</h3>
+                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2024</span>
+              </div>
+              <p class="text-sm text-accent font-medium mb-2">Interactive Exhibition</p>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Coded a generative art project where people can interactively generate their own virus-like particles. Featured at multiple exhibitions.</p>
+            </div>
+
+            <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
+              <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
+                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white">Botanical Photography</h3>
+                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2020–Present</span>
+              </div>
+              <p class="text-sm text-accent font-medium mb-2">Fine Art &amp; Documentary</p>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Creative documentation of natural phenomena and street photography for exhibitions. Exploring the intersection of science and visual storytelling.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TEACHING & COACHING -->
+        <div x-show="activeTab === 'teaching'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+          <div class="space-y-4">
+            <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
+              <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
+                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white">Sports Coach (Volunteer)</h3>
+                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2020–Present</span>
+              </div>
+              <p class="text-sm text-accent font-medium mb-2">Climbing • Tennis • Badminton • Squash</p>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Helping people gain confidence in their physical and mental abilities, allowing them to overcome fears and achieve their goals.</p>
+            </div>
+
+            <div class="bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
+              <div class="flex flex-wrap items-start justify-between gap-2 mb-2">
+                <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white">Science Communication Workshops</h3>
+                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2020–Present</span>
+              </div>
+              <p class="text-sm text-accent font-medium mb-2">For Scientists &amp; Educators</p>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Teaching scientists how to communicate their research effectively through photography, data visualization, and storytelling.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- AWARDS -->
+        <div x-show="activeTab === 'awards'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+          <div class="grid md:grid-cols-2 gap-4">
+            <div class="award-card bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 bg-[#e6f0ea] dark:bg-zinc-800 rounded-xl flex items-center justify-center">
+                  <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
+                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2018</span>
+              </div>
+              <h3 class="font-display font-bold text-base text-zinc-900 dark:text-white">MSc cum laude</h3>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400">Wageningen University &amp; Research</p>
+            </div>
+
+            <div class="award-card bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 bg-[#e6f0ea] dark:bg-zinc-800 rounded-xl flex items-center justify-center">
+                  <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
+                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2016</span>
+              </div>
+              <h3 class="font-display font-bold text-base text-zinc-900 dark:text-white">Netherlands-Asia Honours Programme</h3>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400">Peking University • National honours</p>
+            </div>
+
+            <div class="award-card bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 bg-[#e6f0ea] dark:bg-zinc-800 rounded-xl flex items-center justify-center">
+                  <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
+                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2024</span>
+              </div>
+              <h3 class="font-display font-bold text-base text-zinc-900 dark:text-white">Best Science Communication Initiative</h3>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400">GeneSprout Initiative • Nominated</p>
+            </div>
+
+            <div class="award-card bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 bg-[#e6f0ea] dark:bg-zinc-800 rounded-xl flex items-center justify-center">
+                  <svg class="w-5 h-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
+                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2020</span>
+              </div>
+              <h3 class="font-display font-bold text-base text-zinc-900 dark:text-white">Excellence in Plant Research</h3>
+              <p class="text-sm text-zinc-500 dark:text-zinc-400">Wageningen University • Awarded</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ═══ EDUCATION ═══ -->
-<section class="py-12 bg-[#f5f9f6] dark:bg-[#121a15]">
-  <div class="max-w-4xl mx-auto px-6">
-    <div class="mb-10">
-      <p class="reveal text-xs font-semibold text-accent dark:text-accent-light tracking-widest uppercase mb-2">Education</p>
-      <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">Education</h2>
-    </div>
-
-       <div class="space-y-4">
-      <!-- Education 1 - Wageningen University (MSc) -->
-      <div class="reveal d1 bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 flex items-start gap-6">
-        <!-- Logo -->
-        <div class="hidden sm:block w-16 h-16 min-w-[4rem] flex items-center justify-center">
-          <img src="images/logos/wur.png" alt="Wageningen University" class="max-w-full max-h-full object-contain" loading="lazy" onerror="this.style.display='none'">
-        </div>
-        <div class="flex-1">
-          <!-- Title row with year on the right -->
-          <div class="flex flex-wrap items-start justify-between gap-2">
-            <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white">MSc Plant Biotechnology</h3>
-            <span class="text-xs font-medium bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full whitespace-nowrap">2016 – 2018</span>
-          </div>
-          <p class="text-sm text-accent font-medium">Wageningen University &amp; Research</p>
-          <div class="flex flex-wrap items-center gap-2 mt-1">
-            <span class="text-xs font-semibold text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-2.5 py-0.5 rounded-full">cum laude</span>
-          </div>
-          <div class="mt-1 space-y-0.5">
-            <p class="text-xs text-zinc-500 dark:text-zinc-400">• Major Thesis: The role of ARF3 in Chinese cabbage</p>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400">• Minor Thesis: Using mechanisms of white-rot fungi to alleviate endocrine disruptive compounds in water bodies</p>
-            <p class="text-xs text-zinc-500 dark:text-zinc-400">• Research proposal: The (epi)genetic basis for strain instability in mushrooms (Agaricus bisporus)</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Education 2 - Peking University -->
-      <div class="reveal d2 bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 flex items-center gap-6">
-        <div class="hidden sm:block w-16 h-16 min-w-[4rem] flex items-center justify-center">
-          <img src="images/logos/peking-logo.webp" alt="Peking University" class="max-w-full max-h-full object-contain" loading="lazy" onerror="this.style.display='none'">
-        </div>
-        <div class="flex-1">
-          <div class="flex flex-wrap items-start justify-between gap-2">
-            <div>
-              <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white">Netherlands-Asia Honours Summer School</h3>
-              <p class="text-sm text-accent font-medium">Peking University</p>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">National honours programme</p>
-            </div>
-            <span class="text-xs font-medium bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full whitespace-nowrap">2016</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Education 3 - Wageningen University (BSc) -->
-      <div class="reveal d3 bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 flex items-center gap-6">
-        <div class="hidden sm:block w-16 h-16 min-w-[4rem] flex items-center justify-center">
-          <img src="images/logos/wur.png" alt="Wageningen University" class="max-w-full max-h-full object-contain" loading="lazy" onerror="this.style.display='none'">
-        </div>
-        <div class="flex-1">
-          <div class="flex flex-wrap items-start justify-between gap-2">
-            <div>
-              <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white">BSc Plant Sciences</h3>
-              <p class="text-sm text-accent font-medium">Wageningen University &amp; Research</p>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Major: Plant Sciences</p>
-            </div>
-            <span class="text-xs font-medium bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full whitespace-nowrap">2013 – 2016</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Education 4 - Revius Lyceum (no logo) -->
-      <div class="reveal d4 bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 flex items-center gap-6">
-        <div class="hidden sm:block w-16 h-16 min-w-[4rem] flex items-center justify-center">
-        </div>
-        <div class="flex-1">
-          <div class="flex flex-wrap items-start justify-between gap-2">
-            <div>
-              <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white">VWO (Bilingual)</h3>
-              <p class="text-sm text-accent font-medium">Revius Lyceum Doorn / KSG De Breul Zeist</p>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Bilingual secondary education (Dutch/English)</p>
-            </div>
-            <span class="text-xs font-medium bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full whitespace-nowrap">2007 – 2013</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-    <!-- ═══ SKILLS ═══ -->
-    <section class="py-12 bg-[#edf3ef] dark:bg-[#1a261f]">
-      <div class="max-w-4xl mx-auto px-6">
-        <div class="mb-10">
-          <p class="reveal text-xs font-semibold text-accent dark:text-accent-light tracking-widest uppercase mb-2">Expertise</p>
-          <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">Skills</h2>
+    <!-- ═══ PUBLICATIONS (Always Visible) ═══ -->
+    <section id="publications" class="py-12 bg-[#edf3ef] dark:bg-[#1a261f]">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="mb-8">
+          <p class="reveal text-xs font-semibold text-accent dark:text-accent-light tracking-widest uppercase mb-2">Research Output</p>
+          <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">Publications</h2>
+          <p class="reveal d2 text-zinc-500 dark:text-zinc-400 mt-1">Peer-reviewed articles, book chapters, and preprints</p>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="reveal d1 bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
-            <h3 class="font-display font-bold text-base text-zinc-900 dark:text-white mb-3">Research &amp; Lab</h3>
-            <div class="flex flex-wrap gap-2">
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Molecular Biology</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Plant Physiology</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Genetics</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Virology</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Epigenetics</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Bioinformatics</span>
+        <!-- Accordion-style publications -->
+        <div class="space-y-3">
+          <div class="reveal d1 accordion-item bg-white dark:bg-[#1e2a23] rounded-2xl p-5 border border-zinc-100 dark:border-zinc-700">
+            <button @click="openSection = openSection === 1 ? null : 1" class="w-full flex items-center justify-between text-left">
+              <div class="flex-1 pr-4">
+                <p class="text-sm font-medium text-zinc-900 dark:text-white">Rooting for resilience: Development and salt stress response in true potato seed roots</p>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400">Boer, D. (2025) • PhD Thesis • <span class="text-accent">DOI: 10.18174/681082</span></p>
+              </div>
+              <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="openSection === 1 ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div x-show="openSection === 1" x-collapse>
+              <div class="pt-3 text-sm text-zinc-500 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-700 mt-3">
+                Wageningen University &amp; Research. <a href="https://doi.org/10.18174/681082" target="_blank" class="text-accent hover:text-accent-light transition-colors">View Publication →</a>
+              </div>
             </div>
           </div>
 
-          <div class="reveal d2 bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
-            <h3 class="font-display font-bold text-base text-zinc-900 dark:text-white mb-3">Creative &amp; Technical</h3>
-            <div class="flex flex-wrap gap-2">
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Photography</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Video editing</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Creative Coding</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Generative Art</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Pen Plotting</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Web Development</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Data Visualization</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Music production basics</span>
-
+          <div class="reveal d2 accordion-item bg-white dark:bg-[#1e2a23] rounded-2xl p-5 border border-zinc-100 dark:border-zinc-700">
+            <button @click="openSection = openSection === 2 ? null : 2" class="w-full flex items-center justify-between text-left">
+              <div class="flex-1 pr-4">
+                <p class="text-sm font-medium text-zinc-900 dark:text-white">Potato cultivars use distinct mechanisms for salt stress acclimation</p>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400">Nicolas, M., Bouma, J., ..., Boer, D., ... &amp; Karlova, R. (2025) • Plant Stress • <span class="text-accent">DOI: 10.1016/j.stress.2025.100798</span></p>
+              </div>
+              <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="openSection === 2 ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div x-show="openSection === 2" x-collapse>
+              <div class="pt-3 text-sm text-zinc-500 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-700 mt-3">
+                <a href="https://doi.org/10.1016/j.stress.2025.100798" target="_blank" class="text-accent hover:text-accent-light transition-colors">View Publication →</a>
+              </div>
             </div>
           </div>
 
-          <div class="reveal d3 bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
-            <h3 class="font-display font-bold text-base text-zinc-900 dark:text-white mb-3">Languages</h3>
-            <div class="flex flex-wrap gap-2">
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Dutch (Native)</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">English (Fluent)</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Polish (Conversational)</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Mandarin Chinese (basic)</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">German (basic)</span>
+          <div class="reveal d3 accordion-item bg-white dark:bg-[#1e2a23] rounded-2xl p-5 border border-zinc-100 dark:border-zinc-700">
+            <button @click="openSection = openSection === 3 ? null : 3" class="w-full flex items-center justify-between text-left">
+              <div class="flex-1 pr-4">
+                <p class="text-sm font-medium text-zinc-900 dark:text-white">PlantACT! – how to tackle the climate crisis</p>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400">Hirt, H., Al-Babili, S., ..., Boer, D., ... &amp; Young, I. M. (2023) • Trends in Plant Science • <span class="text-accent">DOI: 10.1016/j.tplants.2023.01.005</span></p>
+              </div>
+              <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="openSection === 3 ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div x-show="openSection === 3" x-collapse>
+              <div class="pt-3 text-sm text-zinc-500 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-700 mt-3">
+                <a href="https://doi.org/10.1016/j.tplants.2023.01.005" target="_blank" class="text-accent hover:text-accent-light transition-colors">View Publication →</a>
+              </div>
             </div>
           </div>
 
-          <div class="reveal d4 bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
-            <h3 class="font-display font-bold text-base text-zinc-900 dark:text-white mb-3">Science Communication</h3>
-            <div class="flex flex-wrap gap-2">
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Workshop Facilitation</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Developing teaching materials</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Educational Design</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Writing</span>
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-3 py-1 rounded-full">Outreach</span>
+          <div class="reveal d4 accordion-item bg-white dark:bg-[#1e2a23] rounded-2xl p-5 border border-zinc-100 dark:border-zinc-700">
+            <button @click="openSection = openSection === 4 ? null : 4" class="w-full flex items-center justify-between text-left">
+              <div class="flex-1 pr-4">
+                <p class="text-sm font-medium text-zinc-900 dark:text-white">Root plasticity under abiotic stress</p>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400">Karlova, R., Boer, D., Hayes, S., &amp; Testerink, C. (2021) • Plant Physiology • <span class="text-accent">DOI: 10.1093/plphys/kiab392</span></p>
+              </div>
+              <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="openSection === 4 ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div x-show="openSection === 4" x-collapse>
+              <div class="pt-3 text-sm text-zinc-500 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-700 mt-3">
+                <a href="https://doi.org/10.1093/plphys/kiab392" target="_blank" class="text-accent hover:text-accent-light transition-colors">View Publication →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="reveal d5 accordion-item bg-white dark:bg-[#1e2a23] rounded-2xl p-5 border border-zinc-100 dark:border-zinc-700">
+            <button @click="openSection = openSection === 5 ? null : 5" class="w-full flex items-center justify-between text-left">
+              <div class="flex-1 pr-4">
+                <p class="text-sm font-medium text-zinc-900 dark:text-white">Epigenetic regulation of spurious transcription initiation in Arabidopsis</p>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400">Le, N. T., Harukawa, Y., Miura, S., Boer, D., Kawabe, A., &amp; Saze, H. (2020) • Nature Communications • <span class="text-accent">DOI: 10.1038/s41467-020-16951-w</span></p>
+              </div>
+              <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="openSection === 5 ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div x-show="openSection === 5" x-collapse>
+              <div class="pt-3 text-sm text-zinc-500 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-700 mt-3">
+                <a href="https://doi.org/10.1038/s41467-020-16951-w" target="_blank" class="text-accent hover:text-accent-light transition-colors">View Publication →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="reveal d6 accordion-item bg-white dark:bg-[#1e2a23] rounded-2xl p-5 border border-zinc-100 dark:border-zinc-700">
+            <button @click="openSection = openSection === 6 ? null : 6" class="w-full flex items-center justify-between text-left">
+              <div class="flex-1 pr-4">
+                <p class="text-sm font-medium text-zinc-900 dark:text-white">Give CRISPR a Chance: The GeneSprout Initiative</p>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400">Vangheluwe, N., Swinnen, G., ..., Boer, D., ... &amp; Rienstra, J. (2020) • Trends in Plant Science • <span class="text-accent">DOI: 10.1016/j.tplants.2020.04.011</span></p>
+              </div>
+              <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="openSection === 6 ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div x-show="openSection === 6" x-collapse>
+              <div class="pt-3 text-sm text-zinc-500 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-700 mt-3">
+                <a href="https://doi.org/10.1016/j.tplants.2020.04.011" target="_blank" class="text-accent hover:text-accent-light transition-colors">View Publication →</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="reveal d7 accordion-item bg-white dark:bg-[#1e2a23] rounded-2xl p-5 border border-zinc-100 dark:border-zinc-700">
+            <button @click="openSection = openSection === 7 ? null : 7" class="w-full flex items-center justify-between text-left">
+              <div class="flex-1 pr-4">
+                <p class="text-sm font-medium text-zinc-900 dark:text-white">White-Rot Fungi as potential Bioremediators of Endocrine Disrupting Compounds</p>
+                <p class="text-xs text-zinc-500 dark:text-zinc-400">Boer, D. C. B. (2024) • Preprint • <span class="text-accent">Available upon request</span></p>
+              </div>
+              <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="openSection === 7 ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div x-show="openSection === 7" x-collapse>
+              <div class="pt-3 text-sm text-zinc-500 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-700 mt-3">
+                Mini-review. <span class="text-accent font-medium">Available upon request</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-
-    <!-- ═══ SCIENTIFIC PUBLICATIONS ═══ -->
-<!-- ═══ SCIENTIFIC PUBLICATIONS ═══ -->
-<section id="publications" class="py-12 bg-[#f5f9f6] dark:bg-[#121a15]">
-  <div class="max-w-4xl mx-auto px-6">
-    <div class="mb-10">
-      <p class="reveal text-xs font-semibold text-accent dark:text-accent-light tracking-widest uppercase mb-2">Research</p>
-      <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">Scientific Publications</h2>
-      <p class="reveal d2 text-zinc-500 dark:text-zinc-400 mt-2">Contributions to peer-reviewed articles, book chapters, and theses</p>
-    </div>
-
-    <div class="space-y-4">
-      <!-- Publication 1 -->
-      <div class="reveal d1 pub-card bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors">
-        <div class="flex flex-wrap items-start gap-2 mb-2">
-          <span class="text-xs font-semibold text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2025</span>
-          <span class="text-xs bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">PhD Thesis</span>
-        </div>
-        <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2">Rooting for resilience: Development and salt stress response in true potato seed roots</h3>
-        <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed mb-2">
-          Boer, D. (2025). Wageningen University &amp; Research.
-        </p>
-        <div class="flex flex-wrap items-center gap-3 text-xs">
-          <span class="text-zinc-500 dark:text-zinc-400">DOI: <a href="https://doi.org/10.18174/681082" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-light transition-colors">10.18174/681082</a></span>
-          <a href="https://doi.org/10.18174/681082" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-light transition-colors font-medium">View Publication →</a>
-        </div>
-      </div>
-
-      <!-- Publication 2 -->
-      <div class="reveal d2 pub-card bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors">
-        <div class="flex flex-wrap items-start gap-2 mb-2">
-          <span class="text-xs font-semibold text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2025</span>
-          <span class="text-xs bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">Journal Article</span>
-        </div>
-        <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2">Potato cultivars use distinct mechanisms for salt stress acclimation</h3>
-        <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed mb-2">
-          Nicolas, M., Bouma, J., Venema, J. H., van der Schoot, H., Verstappen, F., de Zeeuw, T., Langedijk, S. E., Boer, D., Bucher, J., Staal, M., Krom, B., Elzenga, J. T. M., Visser, R. G. F., Testerink, C., &amp; Karlova, R. (2025). <em>Plant Stress</em>, 15, 100798.
-        </p>
-        <div class="flex flex-wrap items-center gap-3 text-xs">
-          <span class="text-zinc-500 dark:text-zinc-400">DOI: <a href="https://doi.org/10.1016/j.stress.2025.100798" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-light transition-colors">10.1016/j.stress.2025.100798</a></span>
-          <a href="https://doi.org/10.1016/j.stress.2025.100798" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-light transition-colors font-medium">View Publication →</a>
-        </div>
-      </div>
-
-      <!-- Publication 3 -->
-      <div class="reveal d3 pub-card bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors">
-        <div class="flex flex-wrap items-start gap-2 mb-2">
-          <span class="text-xs font-semibold text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2023</span>
-          <span class="text-xs bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">Journal Article</span>
-        </div>
-        <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2">PlantACT! – how to tackle the climate crisis</h3>
-        <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed mb-2">
-          Hirt, H., Al-Babili, S., Almeida-Trapp, M., Martin, A., Aranda, M., Bartels, D., Bennett, M., Blilou, I., Boer, D., Boulouis, A., Bowler, C., Brunel-Muguet, S., Chardon, F., Colcombet, J., Colot, V., Daszkowska-Golec, A., Dinneny, J. R., Field, B., Froehlich, K., … Young, I. M. (2023). <em>Trends in Plant Science</em>, 28(5), 537–543.
-        </p>
-        <div class="flex flex-wrap items-center gap-3 text-xs">
-          <span class="text-zinc-500 dark:text-zinc-400">DOI: <a href="https://doi.org/10.1016/j.tplants.2023.01.005" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-light transition-colors">10.1016/j.tplants.2023.01.005</a></span>
-          <a href="https://doi.org/10.1016/j.tplants.2023.01.005" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-light transition-colors font-medium">View Publication →</a>
-        </div>
-      </div>
-
-      <!-- Publication 4 -->
-      <div class="reveal d4 pub-card bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors">
-        <div class="flex flex-wrap items-start gap-2 mb-2">
-          <span class="text-xs font-semibold text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2021</span>
-          <span class="text-xs bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">Journal Article</span>
-        </div>
-        <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2">Root plasticity under abiotic stress</h3>
-        <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed mb-2">
-          Karlova, R.*, Boer, D.*, Hayes, S., &amp; Testerink, C. (2021). <em>Plant Physiology</em>, 187(3), 1057–1070. * co-first author
-        </p>
-        <div class="flex flex-wrap items-center gap-3 text-xs">
-          <span class="text-zinc-500 dark:text-zinc-400">DOI: <a href="https://doi.org/10.1093/plphys/kiab392" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-light transition-colors">10.1093/plphys/kiab392</a></span>
-          <a href="https://doi.org/10.1093/plphys/kiab392" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-light transition-colors font-medium">View Publication →</a>
-        </div>
-      </div>
-
-      <!-- Publication 5 -->
-      <div class="reveal d5 pub-card bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors">
-        <div class="flex flex-wrap items-start gap-2 mb-2">
-          <span class="text-xs font-semibold text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2020</span>
-          <span class="text-xs bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">Journal Article</span>
-        </div>
-        <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2">Epigenetic regulation of spurious transcription initiation in Arabidopsis</h3>
-        <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed mb-2">
-          Le, N. T., Harukawa, Y., Miura, S., Boer, D., Kawabe, A., &amp; Saze, H. (2020). <em>Nature Communications</em>, 11(1), 3224.
-        </p>
-        <div class="flex flex-wrap items-center gap-3 text-xs">
-          <span class="text-zinc-500 dark:text-zinc-400">DOI: <a href="https://doi.org/10.1038/s41467-020-16951-w" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-light transition-colors">10.1038/s41467-020-16951-w</a></span>
-          <a href="https://doi.org/10.1038/s41467-020-16951-w" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-light transition-colors font-medium">View Publication →</a>
-        </div>
-      </div>
-
-      <!-- Publication 6 -->
-      <div class="reveal d6 pub-card bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors">
-        <div class="flex flex-wrap items-start gap-2 mb-2">
-          <span class="text-xs font-semibold text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2020</span>
-          <span class="text-xs bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">Journal Article</span>
-        </div>
-        <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2">Give CRISPR a Chance: The GeneSprout Initiative</h3>
-        <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed mb-2">
-          Vangheluwe, N., Swinnen, G., Koning, R. de, Meyer, P., Houben, M., Huybrechts, M., Sajeev, N., Rienstra, J., &amp; Boer, D. (2020). <em>Trends in Plant Science</em>, 25(7), 624–627.
-        </p>
-        <div class="flex flex-wrap items-center gap-3 text-xs">
-          <span class="text-zinc-500 dark:text-zinc-400">DOI: <a href="https://doi.org/10.1016/j.tplants.2020.04.011" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-light transition-colors">10.1016/j.tplants.2020.04.011</a></span>
-          <a href="https://doi.org/10.1016/j.tplants.2020.04.011" target="_blank" rel="noopener noreferrer" class="text-accent hover:text-accent-light transition-colors font-medium">View Publication →</a>
-        </div>
-      </div>
-
-      <!-- Publication 7 - Mini Review (preprint) -->
-      <div class="reveal d7 pub-card bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors">
-        <div class="flex flex-wrap items-start gap-2 mb-2">
-          <span class="text-xs font-semibold text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full">2018</span>
-          <span class="text-xs bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 px-3 py-1 rounded-full">MSc minor thesis</span>
-        </div>
-        <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2">White-Rot Fungi as potential Bioremediators of Endocrine Disrupting Compounds — A mini review</h3>
-        <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed mb-2">
-          Boer, D. C. B. (2018). <em>MSc minor thesis</em>.
-        </p>
-        <div class="flex flex-wrap items-center gap-3 text-xs">
-          <span class="text-zinc-500 dark:text-zinc-400">|</span>
-          <span class="text-accent font-medium">Available upon request</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
 
     <!-- ═══ CTA ═══ -->
-    <section class="py-12 bg-[#edf3ef] dark:bg-[#1a261f]">
+    <section class="py-12 bg-[#f5f9f6] dark:bg-[#121a15]">
       <div class="max-w-4xl mx-auto px-6">
-        <div class="bg-[#1b3b2f] dark:bg-[#1e2a23] rounded-3xl p-10 text-center relative overflow-hidden">
+        <div class="bg-[#1b3b2f] dark:bg-[#1e2a23] rounded-3xl p-8 md:p-12 text-center relative overflow-hidden">
           <div class="absolute top-0 right-0 w-64 h-64 bg-accent/30 rounded-full blur-3xl pointer-events-none"></div>
           <div class="absolute bottom-0 left-0 w-40 h-40 bg-[#7A9E7E]/20 rounded-full blur-2xl pointer-events-none"></div>
           <div class="relative z-10">
@@ -564,10 +524,8 @@
   </footer>
 
   <script>
-    // Set year
     document.getElementById('yr').textContent = new Date().getFullYear();
 
-    // Reveal on scroll
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) {
