@@ -1,107 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" x-data="{
-  dark: localStorage.getItem('theme')==='dark'||(!localStorage.getItem('theme')&&window.matchMedia('(prefers-color-scheme: dark)').matches),
-  scrolled: false,
-  mobileMenu: false,
-  selectedArticle: null,
-  articles: [
-    {
-      id: 1,
-      title: 'The Hidden World of Plant Roots',
-      date: 'March 15, 2025',
-      category: 'Plant Science',
-      image: 'https://images.unsplash.com/photo-1518495973542-65cbb9273ef0?w=800&q=80',
-      excerpt: 'Exploring the fascinating underground networks that sustain plant life and how they communicate with each other.',
-      content: `
-        <p>Roots are often overlooked, yet they are the foundation of plant life. Recent research has revealed that root systems are not just passive anchors—they are active communication hubs.</p>
-        <p>Plants use their roots to share resources, warn each other of threats, and even recognize their kin. This underground network, sometimes called the "wood wide web," is mediated by mycorrhizal fungi that connect plants in a symbiotic relationship.</p>
-        <p>This discovery has profound implications for agriculture. By understanding how roots interact, we can develop more resilient crops and sustainable farming practices.</p>
-        <p><strong>Key takeaways:</strong></p>
-        <ul>
-          <li>Roots communicate through chemical signals</li>
-          <li>Mycorrhizal fungi act as a network connecting plants</li>
-          <li>Understanding root communication can improve crop resilience</li>
-        </ul>
-      `
-    },
-    {
-      id: 2,
-      title: 'Creative Coding for Biodiversity',
-      date: 'February 28, 2025',
-      category: 'Creative Coding',
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
-      excerpt: 'How I use generative art and interactive installations to communicate complex ecological concepts.',
-      content: `
-        <p>Art and science have always been intertwined. In my work, I use creative coding to make complex ecological concepts accessible and engaging.</p>
-        <p>Generative art allows us to visualize data in new ways. For example, I recently created an interactive installation where visitors could generate their own virus-like particles, learning about viral structure in the process.</p>
-        <p>By combining code with ecological data, we can create experiences that inform, inspire, and provoke curiosity about the natural world.</p>
-        <p><strong>Tools I use:</strong></p>
-        <ul>
-          <li>p5.js for generative visuals</li>
-          <li>Pen plotting for physical art</li>
-          <li>Interactive web experiences with Alpine.js</li>
-        </ul>
-      `
-    },
-    {
-      id: 3,
-      title: 'Biodiversity Conservation: Why Every Species Matters',
-      date: 'January 10, 2025',
-      category: 'Biodiversity',
-      image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80',
-      excerpt: 'A deep dive into the importance of preserving biodiversity and how we can all contribute to conservation efforts.',
-      content: `
-        <p>Biodiversity is the foundation of life on Earth. Every species, from the smallest microbe to the largest tree, plays a role in maintaining healthy ecosystems.</p>
-        <p>Yet, we are losing species at an alarming rate. Habitat destruction, climate change, and pollution are driving a sixth mass extinction event.</p>
-        <p>But there is hope. Conservation efforts around the world are making a difference. By protecting natural habitats, reducing pollution, and supporting sustainable practices, we can help preserve biodiversity for future generations.</p>
-        <p><strong>What you can do:</strong></p>
-        <ul>
-          <li>Support conservation organizations</li>
-          <li>Reduce your environmental footprint</li>
-          <li>Educate others about biodiversity</li>
-          <li>Plant native species in your garden</li>
-        </ul>
-      `
-    },
-    {
-      id: 4,
-      title: 'From Lab to Exhibition: The Science of Visual Storytelling',
-      date: 'December 5, 2024',
-      category: 'Science Communication',
-      image: 'https://images.unsplash.com/photo-1530023367847-a683933f4172?w=800&q=80',
-      excerpt: 'How I translate complex scientific research into engaging visual experiences for public exhibitions.',
-      content: `
-        <p>Science communication is about more than just presenting facts—it's about telling stories that resonate. My approach combines scientific accuracy with artistic creativity.</p>
-        <p>In my exhibitions, I use photography, generative art, and interactive elements to invite visitors to explore scientific concepts at their own pace. The goal is not just to inform, but to inspire wonder and curiosity.</p>
-        <p>One of my most successful projects was an exhibition about plant roots, where visitors could see real root systems and interact with a generative visualization of root growth.</p>
-        <p><strong>Key principles:</strong></p>
-        <ul>
-          <li>Make science accessible and engaging</li>
-          <li>Use visuals to explain complex concepts</li>
-          <li>Create opportunities for hands-on exploration</li>
-        </ul>
-      `
-    }
-  ]
-}" :class="{'dark':dark}" x-init="
-  $watch('dark', v => localStorage.setItem('theme', v ? 'dark' : 'light'));
-  window.addEventListener('scroll', () => { scrolled = window.scrollY > 20; }, { passive: true });
-" class="scroll-smooth">
+<html lang="en" x-data="blog()" :class="{'dark':dark}" x-init="init()" class="scroll-smooth">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Damian Boer — Blog. Thoughts on plant science, biodiversity, creative coding, and visual storytelling."/>
-  <meta name="author" content="Damian Boer"/>
+  <meta name="description" content="Damian — Plant Scientist & Visual artist. Blog about plant science, biodiversity, creative coding, and science communication.">
   <title>Blog — Damian Boer</title>
 
   <!-- Tailwind + Alpine -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <!-- Google Fonts: Space Grotesk + Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <script>
     tailwind.config = {
@@ -130,6 +42,7 @@
     html,body{font-family:'Inter',sans-serif;background-color:#f5f9f6;transition:background-color .3s,color .3s;}
     h1,h2,h3,h4,h5,h6{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:-0.02em;}
 
+    /* Dark mode overrides */
     .dark body{background-color:#121a15;}
     .dark .bg-white{background-color:#1e2a23;}
     .dark .bg-zinc-50{background-color:#1a261f;}
@@ -139,9 +52,11 @@
     .dark .text-zinc-400{color:#8aa898;}
     .dark .bg-zinc-100{background-color:#2a3a30;}
 
+    /* Noise overlay */
     body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.12;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");}
 
-    ::-webkit-scrollbar{width:5px;}
+    /* Scrollbar - Forest Green */
+    ::-webkit-scrollbar{width:10px;}
     ::-webkit-scrollbar-track{background:transparent;}
     ::-webkit-scrollbar-thumb{background:#2D6A4F;border-radius:99px;}
     ::-webkit-scrollbar-thumb:hover{background:#409F7A;}
@@ -150,24 +65,36 @@
     *{scrollbar-width:thin;scrollbar-color:#2D6A4F transparent;}
     .dark *{scrollbar-color:#409F7A transparent;}
 
+    /* Reveal animation */
+    .reveal{opacity:0;transform:translateY(22px);transition:opacity .55s cubic-bezier(.4,0,.2,1),transform .55s cubic-bezier(.4,0,.2,1);}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+
+    /* Nav underline */
     .nl{position:relative;}
     .nl::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:currentColor;transition:width .22s cubic-bezier(.4,0,.2,1);}
-    .nl:hover::after{width:100%;}
+    .nl:hover::after,.nl.on::after{width:100%;}
     .nl.on{font-weight:600;}
 
+    /* Shimmer button */
     .shimmer{position:relative;overflow:hidden;}
     .shimmer::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:rgba(255,255,255,.18);transform:skewX(-20deg);transition:left .4s cubic-bezier(.4,0,.2,1);}
     .shimmer:hover::after{left:160%;}
 
-    [x-cloak]{display:none!important;}
+    /* Photo frame */
+    .photo-frame{position:relative;overflow:hidden;background:#d4d8d0;}
+    .photo-frame img{width:100%;height:100%;object-fit:cover;display:block;}
 
-    .reveal{opacity:0;transform:translateY(22px);transition:opacity .55s cubic-bezier(.4,0,.2,1),transform .55s cubic-bezier(.4,0,.2,1);}
-    .reveal.visible{opacity:1;transform:translateY(0);}
-    .d1{transition-delay:.07s}.d2{transition-delay:.14s}.d3{transition-delay:.21s}.d4{transition-delay:.28s}
-
+    /* Blog card */
     .blog-card{transition:transform .28s cubic-bezier(.4,0,.2,1),border-color .18s;}
-    .blog-card:hover{transform:translateY(-4px);}
+    .blog-card:hover{transform:translateY(-4px);border-color:#2D6A4F;}
 
+    /* Tags */
+    .tag-accent{background-color:#e6f0ea;color:#2D6A4F;border-color:#95b8a7;}
+    .dark .tag-accent{background-color:#1e2a23;color:#409F7A;border-color:#2a3a30;}
+    .tag-neutral{background-color:#e4e7e5;color:#4a5a52;border-color:#c8d0ca;}
+    .dark .tag-neutral{background-color:#2a3a30;color:#a0b8aa;border-color:#3a4a40;}
+
+    /* Article prose */
     .prose-article h2{font-family:'Space Grotesk',sans-serif;font-size:1.55rem;font-weight:700;margin:2rem 0 1rem;line-height:1.25;color:#1e2a23;}
     .dark .prose-article h2{color:#e6f0ea;}
     .prose-article h3{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:600;margin:1.5rem 0 .6rem;line-height:1.3;color:#2D6A4F;}
@@ -177,178 +104,281 @@
     .prose-article ul{margin:0 0 1.2rem 1.5rem;list-style:disc;}
     .prose-article li{margin-bottom:.4rem;line-height:1.7;color:#52525b;}
     .dark .prose-article li{color:#a1a1aa;}
+
+    [x-cloak]{display:none!important;}
   </style>
 </head>
 
 <body class="bg-[#f5f9f6] dark:bg-[#121a15] text-zinc-800 dark:text-zinc-100 font-body antialiased">
 
-  <!-- ═══ NAV ═══ -->
-  <header class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
-    :class="scrolled ? 'bg-white/90 dark:bg-[#121a15]/90 backdrop-blur-md shadow-sm shadow-black/5' : 'bg-transparent'">
-    <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-      <a href="/page/" class="font-display font-bold text-xl tracking-tight z-10">
-        <span class="text-zinc-900 dark:text-white">Damian </span><span class="text-accent">Boer</span>
+<!-- ═══ NAV ═══ -->
+<header class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
+  :class="scrolled?'bg-white/90 dark:bg-[#121a15]/90 backdrop-blur-md shadow-sm shadow-black/5':''">
+  <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between" aria-label="Main navigation">
+
+    <a href="/page/" class="font-display font-bold text-xl tracking-tight relative z-10">
+      <span class="text-zinc-900 dark:text-white">Damian </span><span class="text-accent"> Boer</span>
+    </a>
+
+    <ul class="hidden md:flex items-center gap-8 text-sm font-medium" role="list">
+      <li><a href="/page/portfolio.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='portfolio'?'on !text-zinc-900 dark:!text-white':''">Portfolio</a></li>
+      <li><a href="/page/blog.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='blog'?'on !text-zinc-900 dark:!text-white':''">Blog</a></li>
+      <li><a href="/page/cv.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='cv'?'on !text-zinc-900 dark:!text-white':''">CV</a></li>
+      <li><a href="/page/#about" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='about'?'on !text-zinc-900 dark:!text-white':''">About</a></li>
+      <li><a href="/page/#contact" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='contact'?'on !text-zinc-900 dark:!text-white':''">Contact</a></li>
+    </ul>
+
+    <div class="flex items-center gap-3">
+      <button @click="dark=!dark" class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" :aria-label="dark?'Light mode':'Dark mode'">
+        <svg x-show="!dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        <svg x-show="dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+      </button>
+      <a href="/page/#contact" class="hidden md:inline-flex items-center gap-2 shimmer bg-accent text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-accent-light transition-colors">
+        Contact me <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
       </a>
-      <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
-        <li><a href="/page/portfolio.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Portfolio</a></li>
-        <li><a href="/page/blog.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors on !text-zinc-900 dark:!text-white">Blog</a></li>
-        <li><a href="/page/cv.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">CV</a></li>
-        <li><a href="/page/#about" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">About</a></li>
-        <li><a href="/page/#contact" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Contact</a></li>
-      </ul>
-      <div class="flex items-center gap-3">
-        <button @click="dark=!dark" class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
-          <svg x-show="!dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-          <svg x-show="dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
-        </button>
-        <a href="/page/#contact" class="hidden md:inline-flex items-center gap-2 shimmer bg-accent text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-accent-light transition-colors">
-          Contact me <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-        </a>
-        <button @click="mobileMenu=!mobileMenu" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700">
-          <svg x-show="!mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          <svg x-show="mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
-      </div>
-    </nav>
-    <div x-show="mobileMenu" x-cloak
-      x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
-      x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2"
-      class="md:hidden bg-white dark:bg-[#121a15] border-t border-zinc-100 dark:border-zinc-800">
-      <ul class="flex flex-col px-6 py-5 gap-4 text-sm font-medium">
-        <li><a href="/page/portfolio.html" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Portfolio</a></li>
-        <li><a href="/page/blog.html" @click="mobileMenu=false" class="block text-accent font-medium">Blog</a></li>
-        <li><a href="/page/cv.html" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">CV</a></li>
-        <li><a href="/page/#about" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">About</a></li>
-        <li><a href="/page/#contact" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Contact</a></li>
-        <li class="pt-2 border-t border-zinc-100 dark:border-zinc-800">
-          <a href="/page/#contact" @click="mobileMenu=false" class="inline-flex shimmer bg-accent text-white font-semibold text-sm px-5 py-2.5 rounded-full">Contact me →</a>
-        </li>
-      </ul>
+      <button @click="mobileMenu=!mobileMenu" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700" :aria-expanded="mobileMenu" aria-label="Toggle menu">
+        <svg x-show="!mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg x-show="mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
     </div>
-  </header>
+  </nav>
 
-  <main>
+  <div x-show="mobileMenu" x-cloak
+    x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+    x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2"
+    class="md:hidden bg-white dark:bg-[#121a15] border-t border-zinc-100 dark:border-zinc-800">
+    <ul class="flex flex-col px-6 py-5 gap-4 text-sm font-medium" role="list">
+      <li><a href="/page/portfolio.html" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Portfolio</a></li>
+      <li><a href="/page/blog.html" @click="mobileMenu=false" class="block text-accent font-medium">Blog</a></li>
+      <li><a href="/page/cv.html" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">CV</a></li>
+      <li><a href="/page/#about" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">About</a></li>
+      <li><a href="/page/#contact" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Contact</a></li>
+      <li class="pt-2 border-t border-zinc-100 dark:border-zinc-800">
+        <a href="/page/#contact" @click="mobileMenu=false" class="inline-flex shimmer bg-accent text-white font-semibold text-sm px-5 py-2.5 rounded-full">Contact me →</a>
+      </li>
+    </ul>
+  </div>
+</header>
 
-    <!-- ═══ BLOG HERO ═══ -->
-    <section class="pt-32 pb-12 relative overflow-hidden">
-      <div class="absolute top-0 right-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute bottom-0 left-0 w-60 h-60 bg-[#7A9E7E]/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="max-w-5xl mx-auto px-6 relative z-10">
-        <p class="reveal text-xs font-semibold text-accent dark:text-accent-light tracking-widest uppercase mb-3">Thoughts &amp; Stories</p>
-        <h1 class="reveal font-display font-bold text-5xl md:text-6xl text-zinc-900 dark:text-white leading-tight mb-4">Blog</h1>
-        <p class="reveal d1 text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed max-w-2xl">
-          Reflections on plant science, biodiversity, creative coding, and the art of science communication.
-        </p>
+<main>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="pt-36 pb-12 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-60 h-60 bg-[#7A9E7E]/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="max-w-6xl mx-auto px-6 relative z-10">
+      <p class="reveal text-xs font-semibold text-accent dark:text-accent-light tracking-widest uppercase mb-3">Thoughts &amp; Stories</p>
+      <h1 class="reveal font-display font-bold text-5xl md:text-6xl text-zinc-900 dark:text-white leading-tight mb-4">Blog</h1>
+      <p class="reveal text-lg text-zinc-600 dark:text-zinc-400 max-w-xl leading-relaxed mb-8">Reflections on plant science, biodiversity, creative coding, and the art of science communication.</p>
+    </div>
+  </section>
+
+  <!-- ═══ BLOG POSTS GRID ═══ -->
+  <section class="pb-24" x-show="!selectedArticle">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <template x-for="article in articles" :key="article.id">
+          <div @click="selectedArticle = article" class="blog-card group h-full rounded-2xl overflow-hidden bg-white dark:bg-[#1e2a23] border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors cursor-pointer">
+            <div class="photo-frame w-full h-52">
+              <img :src="article.image" :alt="article.title" loading="lazy"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap gap-2 mb-3">
+                <span class="text-xs px-2.5 py-1 rounded-full border font-medium tag-accent" x-text="article.category"></span>
+                <span class="text-xs px-2.5 py-1 rounded-full border font-medium tag-neutral" x-text="article.date"></span>
+              </div>
+              <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors" x-text="article.title"></h3>
+              <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed mb-4" x-text="article.excerpt"></p>
+              <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-accent">Read more →</span>
+            </div>
+          </div>
+        </template>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- ═══ BLOG POSTS GRID ═══ -->
-    <section class="pb-24" x-show="!selectedArticle">
-      <div class="max-w-5xl mx-auto px-6">
-        <div class="grid md:grid-cols-2 gap-6">
-          <template x-for="article in articles" :key="article.id">
-            <article @click="selectedArticle = article" class="blog-card group bg-white dark:bg-[#1e2a23] rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors cursor-pointer">
-              <div class="photo-frame w-full h-52">
+  <!-- ═══ ARTICLE DETAIL VIEW ═══ -->
+  <section class="pb-24" x-show="selectedArticle" x-cloak>
+    <div class="max-w-4xl mx-auto px-6">
+      <!-- Back button -->
+      <button @click="selectedArticle = null" class="inline-flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400 hover:text-accent transition-colors mb-6">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"/></svg>
+        Back to all articles
+      </button>
+
+      <div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden">
+        <div class="photo-frame w-full h-64 md:h-80">
+          <img :src="selectedArticle.image" :alt="selectedArticle.title" loading="lazy"/>
+        </div>
+        <div class="p-6 md:p-8">
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span class="text-xs px-2.5 py-1 rounded-full border font-medium tag-accent" x-text="selectedArticle.category"></span>
+            <span class="text-xs px-2.5 py-1 rounded-full border font-medium tag-neutral" x-text="selectedArticle.date"></span>
+          </div>
+          <h1 class="font-display font-bold text-3xl md:text-4xl text-zinc-900 dark:text-white mb-6" x-text="selectedArticle.title"></h1>
+          <div class="prose-article" x-html="selectedArticle.content"></div>
+        </div>
+      </div>
+
+      <!-- Related articles -->
+      <div class="mt-12">
+        <h3 class="font-display font-bold text-2xl text-zinc-900 dark:text-white mb-6">More articles</h3>
+        <div class="grid md:grid-cols-3 gap-4">
+          <template x-for="article in articles.filter(a => a.id !== selectedArticle.id).slice(0, 3)" :key="article.id">
+            <div @click="selectedArticle = article" class="blog-card group bg-white dark:bg-[#1e2a23] rounded-xl overflow-hidden border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors cursor-pointer">
+              <div class="photo-frame w-full h-32">
                 <img :src="article.image" :alt="article.title" loading="lazy"/>
               </div>
-              <div class="p-6">
-                <div class="flex items-center gap-3 mb-3">
-                  <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-2.5 py-1 rounded-full" x-text="article.category"></span>
-                  <span class="text-xs text-zinc-400" x-text="article.date"></span>
-                </div>
-                <h3 class="font-display font-bold text-xl text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors" x-text="article.title"></h3>
-                <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-4" x-text="article.excerpt"></p>
-                <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-accent">Read more →</span>
+              <div class="p-4">
+                <h4 class="font-display font-bold text-sm text-zinc-900 dark:text-white group-hover:text-accent transition-colors" x-text="article.title"></h4>
+                <p class="text-xs text-zinc-400 mt-1" x-text="article.date"></p>
               </div>
-            </article>
+            </div>
           </template>
         </div>
       </div>
-    </section>
-
-    <!-- ═══ ARTICLE DETAIL VIEW ═══ -->
-    <section class="pb-24" x-show="selectedArticle" x-cloak>
-      <div class="max-w-4xl mx-auto px-6">
-        <!-- Back button -->
-        <button @click="selectedArticle = null" class="inline-flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400 hover:text-accent transition-colors mb-6">
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"/></svg>
-          Back to all articles
-        </button>
-
-        <div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden">
-          <div class="photo-frame w-full h-64 md:h-80">
-            <img :src="selectedArticle.image" :alt="selectedArticle.title" loading="lazy"/>
-          </div>
-          <div class="p-6 md:p-8">
-            <div class="flex items-center gap-3 mb-4">
-              <span class="text-xs bg-[#e6f0ea] dark:bg-zinc-800 text-accent px-2.5 py-1 rounded-full" x-text="selectedArticle.category"></span>
-              <span class="text-xs text-zinc-400" x-text="selectedArticle.date"></span>
-            </div>
-            <h1 class="font-display font-bold text-3xl md:text-4xl text-zinc-900 dark:text-white mb-6" x-text="selectedArticle.title"></h1>
-            <div class="prose-article" x-html="selectedArticle.content"></div>
-          </div>
-        </div>
-
-        <!-- Related articles -->
-        <div class="mt-12">
-          <h3 class="font-display font-bold text-2xl text-zinc-900 dark:text-white mb-6">More articles</h3>
-          <div class="grid md:grid-cols-3 gap-4">
-            <template x-for="article in articles.filter(a => a.id !== selectedArticle.id).slice(0, 3)" :key="article.id">
-              <div @click="selectedArticle = article" class="blog-card group bg-white dark:bg-[#1e2a23] rounded-xl overflow-hidden border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors cursor-pointer">
-                <div class="photo-frame w-full h-32">
-                  <img :src="article.image" :alt="article.title" loading="lazy"/>
-                </div>
-                <div class="p-4">
-                  <h4 class="font-display font-bold text-sm text-zinc-900 dark:text-white group-hover:text-accent transition-colors" x-text="article.title"></h4>
-                  <p class="text-xs text-zinc-400 mt-1" x-text="article.date"></p>
-                </div>
-              </div>
-            </template>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ CTA ═══ -->
-    <section class="py-12 bg-[#f5f9f6] dark:bg-[#121a15]">
-      <div class="max-w-4xl mx-auto px-6">
-        <div class="bg-[#1b3b2f] dark:bg-[#1e2a23] rounded-3xl p-8 md:p-12 text-center relative overflow-hidden">
-          <div class="absolute top-0 right-0 w-64 h-64 bg-accent/30 rounded-full blur-3xl pointer-events-none"></div>
-          <div class="absolute bottom-0 left-0 w-40 h-40 bg-[#7A9E7E]/20 rounded-full blur-2xl pointer-events-none"></div>
-          <div class="relative z-10">
-            <p class="text-xs font-semibold text-accent-light tracking-widest uppercase mb-4">Let's connect</p>
-            <h2 class="font-display font-bold text-3xl md:text-4xl text-white mb-4">Enjoyed this article?</h2>
-            <p class="text-[#b0c8ba] max-w-md mx-auto mb-8">I'm always open to conversations about plant science, biodiversity, and creative communication.</p>
-            <a href="/page/#contact" class="inline-flex items-center gap-2 shimmer bg-accent text-white font-semibold px-8 py-3.5 rounded-full hover:bg-accent-light transition-colors">
-              Get in touch →
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ═══ FOOTER ═══ -->
-  <footer class="border-t border-zinc-200 dark:border-zinc-800 bg-[#f5f9f6] dark:bg-[#121a15]">
-    <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <p class="text-sm text-zinc-500 dark:text-zinc-400 font-medium">© <span id="yr"></span> Damian Boer. All rights reserved.</p>
     </div>
-  </footer>
+  </section>
 
-  <script>
-    document.getElementById('yr').textContent = new Date().getFullYear();
+  <!-- ═══ CTA ═══ -->
+  <section class="pb-24">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="bg-[#1b3b2f] dark:bg-[#1e2a23] rounded-3xl p-10 md:p-14 text-center relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-accent/30 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-40 h-40 bg-[#7A9E7E]/20 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="relative z-10">
+          <p class="text-xs font-semibold text-accent-light tracking-widest uppercase mb-4">Let's connect</p>
+          <h2 class="font-display font-bold text-3xl md:text-4xl text-white mb-4">Enjoyed this article?</h2>
+          <p class="text-[#b0c8ba] max-w-md mx-auto mb-8">I'm always open to conversations about plant science, biodiversity, and creative communication.</p>
+          <a href="/page/#contact" class="inline-flex items-center gap-2 shimmer bg-accent text-white font-semibold px-8 py-3.5 rounded-full hover:bg-accent-light transition-colors">Get in touch →</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          obs.unobserve(e.target);
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="border-t border-zinc-200 dark:border-zinc-800 bg-[#f5f9f6] dark:bg-[#121a15]">
+  <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <p class="text-sm text-zinc-500 dark:text-zinc-400 font-medium">© <span id="year"></span> Damian Boer. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  function blog() {
+    return {
+      dark: false,
+      scrolled: false,
+      mobileMenu: false,
+      selectedArticle: null,
+      s: 'blog',
+
+      articles: [
+        {
+          id: 1,
+          title: 'The Hidden World of Plant Roots',
+          date: 'March 15, 2025',
+          category: 'Plant Science',
+          image: 'https://images.unsplash.com/photo-1518495973542-65cbb9273ef0?w=800&q=80',
+          excerpt: 'Exploring the fascinating underground networks that sustain plant life and how they communicate with each other.',
+          content: `
+            <p>Roots are often overlooked, yet they are the foundation of plant life. Recent research has revealed that root systems are not just passive anchors—they are active communication hubs.</p>
+            <p>Plants use their roots to share resources, warn each other of threats, and even recognize their kin. This underground network, sometimes called the "wood wide web," is mediated by mycorrhizal fungi that connect plants in a symbiotic relationship.</p>
+            <p>This discovery has profound implications for agriculture. By understanding how roots interact, we can develop more resilient crops and sustainable farming practices.</p>
+            <p><strong>Key takeaways:</strong></p>
+            <ul>
+              <li>Roots communicate through chemical signals</li>
+              <li>Mycorrhizal fungi act as a network connecting plants</li>
+              <li>Understanding root communication can improve crop resilience</li>
+            </ul>
+          `
+        },
+        {
+          id: 2,
+          title: 'Creative Coding for Biodiversity',
+          date: 'February 28, 2025',
+          category: 'Creative Coding',
+          image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
+          excerpt: 'How I use generative art and interactive installations to communicate complex ecological concepts.',
+          content: `
+            <p>Art and science have always been intertwined. In my work, I use creative coding to make complex ecological concepts accessible and engaging.</p>
+            <p>Generative art allows us to visualize data in new ways. For example, I recently created an interactive installation where visitors could generate their own virus-like particles, learning about viral structure in the process.</p>
+            <p>By combining code with ecological data, we can create experiences that inform, inspire, and provoke curiosity about the natural world.</p>
+            <p><strong>Tools I use:</strong></p>
+            <ul>
+              <li>p5.js for generative visuals</li>
+              <li>Pen plotting for physical art</li>
+              <li>Interactive web experiences with Alpine.js</li>
+            </ul>
+          `
+        },
+        {
+          id: 3,
+          title: 'Biodiversity Conservation: Why Every Species Matters',
+          date: 'January 10, 2025',
+          category: 'Biodiversity',
+          image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80',
+          excerpt: 'A deep dive into the importance of preserving biodiversity and how we can all contribute to conservation efforts.',
+          content: `
+            <p>Biodiversity is the foundation of life on Earth. Every species, from the smallest microbe to the largest tree, plays a role in maintaining healthy ecosystems.</p>
+            <p>Yet, we are losing species at an alarming rate. Habitat destruction, climate change, and pollution are driving a sixth mass extinction event.</p>
+            <p>But there is hope. Conservation efforts around the world are making a difference. By protecting natural habitats, reducing pollution, and supporting sustainable practices, we can help preserve biodiversity for future generations.</p>
+            <p><strong>What you can do:</strong></p>
+            <ul>
+              <li>Support conservation organizations</li>
+              <li>Reduce your environmental footprint</li>
+              <li>Educate others about biodiversity</li>
+              <li>Plant native species in your garden</li>
+            </ul>
+          `
+        },
+        {
+          id: 4,
+          title: 'From Lab to Exhibition: The Science of Visual Storytelling',
+          date: 'December 5, 2024',
+          category: 'Science Communication',
+          image: 'https://images.unsplash.com/photo-1530023367847-a683933f4172?w=800&q=80',
+          excerpt: 'How I translate complex scientific research into engaging visual experiences for public exhibitions.',
+          content: `
+            <p>Science communication is about more than just presenting facts—it's about telling stories that resonate. My approach combines scientific accuracy with artistic creativity.</p>
+            <p>In my exhibitions, I use photography, generative art, and interactive elements to invite visitors to explore scientific concepts at their own pace. The goal is not just to inform, but to inspire wonder and curiosity.</p>
+            <p>One of my most successful projects was an exhibition about plant roots, where visitors could see real root systems and interact with a generative visualization of root growth.</p>
+            <p><strong>Key principles:</strong></p>
+            <ul>
+              <li>Make science accessible and engaging</li>
+              <li>Use visuals to explain complex concepts</li>
+              <li>Create opportunities for hands-on exploration</li>
+            </ul>
+          `
         }
-      });
-    }, { threshold: .08, rootMargin: '0px 0px -30px 0px' });
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-  </script>
+      ],
+
+      init() {
+        this.dark = localStorage.getItem('theme') === 'dark'
+          || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+        window.addEventListener('scroll', () => {
+          this.scrolled = window.scrollY > 20;
+        }, { passive: true });
+
+        this.$nextTick(() => {
+          const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+              if (e.isIntersecting) {
+                e.target.classList.add('visible');
+                obs.unobserve(e.target);
+              }
+            });
+          }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+          document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+        });
+      }
+    }
+  }
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 
 </body>
 </html>
