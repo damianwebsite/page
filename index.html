@@ -193,16 +193,16 @@
   :class="sc?'bg-white/90 dark:bg-[#121a15]/90 backdrop-blur-md shadow-sm shadow-black/5':''">
   <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between" aria-label="Main navigation">
 
-    <a href="#top" class="font-display font-bold text-xl tracking-tight relative z-10">
+    <a href="/page/" class="font-display font-bold text-xl tracking-tight relative z-10">
       <span class="text-zinc-900 dark:text-white">Damian </span><span class="text-accent"> Boer</span>
     </a>
 
     <ul class="hidden md:flex items-center gap-8 text-sm font-medium" role="list">
-      <li><a href="portfolio.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='work'?'on !text-zinc-900 dark:!text-white':''">Portfolio</a></li>
-      <li><a href="blog.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='blog'?'on !text-zinc-900 dark:!text-white':''">Blog</a></li>
-      <li><a href="cv.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='about'?'on !text-zinc-900 dark:!text-white':''">CV</a></li>
-      <li><a href="#about" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='about'?'on !text-zinc-900 dark:!text-white':''">About</a></li>
-      <li><a href="#contact" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='contact'?'on !text-zinc-900 dark:!text-white':''">Contact</a></li>
+      <li><a href="/page/portfolio.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='portfolio'?'on !text-zinc-900 dark:!text-white':''">Portfolio</a></li>
+      <li><a href="/page/blog.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='blog'?'on !text-zinc-900 dark:!text-white':''">Blog</a></li>
+      <li><a href="/page/cv.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='cv'?'on !text-zinc-900 dark:!text-white':''">CV</a></li>
+      <li><a href="/page/#about" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='about'?'on !text-zinc-900 dark:!text-white':''">About</a></li>
+      <li><a href="/page/#contact" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='contact'?'on !text-zinc-900 dark:!text-white':''">Contact</a></li>
     </ul>
 
     <div class="flex items-center gap-3">
@@ -212,7 +212,7 @@
         <svg x-show="dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
       </button>
       <!-- Contact me button -->
-      <a href="#contact" class="hidden md:inline-flex items-center gap-2 shimmer bg-accent text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-accent-light transition-colors">
+      <a href="/page/#contact" class="hidden md:inline-flex items-center gap-2 shimmer bg-accent text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-accent-light transition-colors">
         Contact me <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
       </a>
       <!-- hamburger -->
@@ -229,13 +229,13 @@
     x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2"
     class="md:hidden bg-white dark:bg-[#121a15] border-t border-zinc-100 dark:border-zinc-800">
     <ul class="flex flex-col px-6 py-5 gap-4 text-sm font-medium" role="list">
-      <li><a href="portfolio.html" @click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Portfolio</a></li>
-      <li><a href="blog.html" @click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Blog</a></li>
-      <li><a href="cv.html" @click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">CV</a></li>
-      <li><a href="#about" @click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">About</a></li>
-      <li><a href="#contact" @click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Contact</a></li>
+      <li><a href="/page/portfolio.html" @click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Portfolio</a></li>
+      <li><a href="/page/blog.html" @click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Blog</a></li>
+      <li><a href="/page/cv.html" @click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">CV</a></li>
+      <li><a href="/page/#about" @click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">About</a></li>
+      <li><a href="/page/#contact" @click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Contact</a></li>
       <li class="pt-2 border-t border-zinc-100 dark:border-zinc-800">
-        <a href="#contact" @click="mm=false" class="inline-flex shimmer bg-accent text-white font-semibold text-sm px-5 py-2.5 rounded-full">Contact me →</a>
+        <a href="/page/#contact" @click="mm=false" class="inline-flex shimmer bg-accent text-white font-semibold text-sm px-5 py-2.5 rounded-full">Contact me →</a>
       </li>
     </ul>
   </div>
