@@ -10,7 +10,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-  <!-- Google Fonts: Space Grotesk + Inter -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -42,7 +42,6 @@
     html,body{font-family:'Inter',sans-serif;background-color:#f5f9f6;transition:background-color .3s,color .3s;}
     h1,h2,h3,h4,h5,h6{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:-0.02em;}
 
-    /* Dark mode overrides */
     .dark body{background-color:#121a15;}
     .dark .bg-white{background-color:#1e2a23;}
     .dark .bg-zinc-50{background-color:#1a261f;}
@@ -52,10 +51,8 @@
     .dark .text-zinc-400{color:#8aa898;}
     .dark .bg-zinc-100{background-color:#2a3a30;}
 
-    /* Noise overlay */
     body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.12;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");}
 
-    /* Scrollbar - Forest Green */
     ::-webkit-scrollbar{width:10px;}
     ::-webkit-scrollbar-track{background:transparent;}
     ::-webkit-scrollbar-thumb{background:#2D6A4F;border-radius:99px;}
@@ -65,34 +62,68 @@
     *{scrollbar-width:thin;scrollbar-color:#2D6A4F transparent;}
     .dark *{scrollbar-color:#409F7A transparent;}
 
-    /* Reveal animation */
     .reveal{opacity:0;transform:translateY(22px);transition:opacity .55s cubic-bezier(.4,0,.2,1),transform .55s cubic-bezier(.4,0,.2,1);}
     .reveal.visible{opacity:1;transform:translateY(0);}
 
-    /* Nav underline */
     .nl{position:relative;}
     .nl::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:currentColor;transition:width .22s cubic-bezier(.4,0,.2,1);}
     .nl:hover::after,.nl.on::after{width:100%;}
     .nl.on{font-weight:600;}
 
-    /* Shimmer button */
     .shimmer{position:relative;overflow:hidden;}
     .shimmer::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:rgba(255,255,255,.18);transform:skewX(-20deg);transition:left .4s cubic-bezier(.4,0,.2,1);}
     .shimmer:hover::after{left:160%;}
 
-    /* Photo frame */
     .photo-frame{position:relative;overflow:hidden;background:#d4d8d0;}
     .photo-frame img{width:100%;height:100%;object-fit:cover;display:block;}
 
-    /* Blog card */
-    .blog-card{transition:transform .28s cubic-bezier(.4,0,.2,1),border-color .18s;}
-    .blog-card:hover{transform:translateY(-4px);border-color:#2D6A4F;}
-
-    /* Tags */
     .tag-accent{background-color:#e6f0ea;color:#2D6A4F;border-color:#95b8a7;}
     .dark .tag-accent{background-color:#1e2a23;color:#409F7A;border-color:#2a3a30;}
     .tag-neutral{background-color:#e4e7e5;color:#4a5a52;border-color:#c8d0ca;}
     .dark .tag-neutral{background-color:#2a3a30;color:#a0b8aa;border-color:#3a4a40;}
+
+    /* Timeline specific styles */
+    .timeline-line {
+      position: relative;
+    }
+    .timeline-line::before {
+      content: '';
+      position: absolute;
+      left: 29px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #d4d8d0;
+    }
+    .dark .timeline-line::before {
+      background: #2a3a30;
+    }
+    .timeline-line .last-item::before {
+      display: none;
+    }
+    .timeline-dot {
+      position: relative;
+      padding-left: 60px;
+    }
+    .timeline-dot::before {
+      content: '';
+      position: absolute;
+      left: 22px;
+      top: 24px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #2D6A4F;
+      border: 3px solid #e6f0ea;
+      z-index: 1;
+    }
+    .dark .timeline-dot::before {
+      border-color: #1a261f;
+      background: #409F7A;
+    }
+    .timeline-dot:first-child::before {
+      top: 8px;
+    }
 
     [x-cloak]{display:none!important;}
   </style>
@@ -103,40 +134,33 @@
 <!-- ═══ NAV ═══ -->
 <header class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
   :class="scrolled?'bg-white/90 dark:bg-[#121a15]/90 backdrop-blur-md shadow-sm shadow-black/5':''">
-  <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between" aria-label="Main navigation">
-
-    <a href="/page/" class="font-display font-bold text-xl tracking-tight relative z-10">
-      <span class="text-zinc-900 dark:text-white">Damian </span><span class="text-accent"> Boer</span>
+  <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <a href="/page/" class="font-display font-bold text-xl tracking-tight z-10">
+      <span class="text-zinc-900 dark:text-white">Damian </span><span class="text-accent">Boer</span>
     </a>
-
-    <ul class="hidden md:flex items-center gap-8 text-sm font-medium" role="list">
-      <li><a href="/page/portfolio.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='portfolio'?'on !text-zinc-900 dark:!text-white':''">Portfolio</a></li>
-      <li><a href="/page/blog.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='blog'?'on !text-zinc-900 dark:!text-white':''">Blog</a></li>
-      <li><a href="/page/cv.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='cv'?'on !text-zinc-900 dark:!text-white':''">CV</a></li>
-      <li><a href="/page/#about" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='about'?'on !text-zinc-900 dark:!text-white':''">About</a></li>
-      <li><a href="/page/#contact" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='contact'?'on !text-zinc-900 dark:!text-white':''">Contact</a></li>
+    <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
+      <li><a href="/page/portfolio.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Portfolio</a></li>
+      <li><a href="/page/blog.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors on !text-zinc-900 dark:!text-white">Blog</a></li>
+      <li><a href="/page/cv.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">CV</a></li>
+      <li><a href="/page/#about" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">About</a></li>
+      <li><a href="/page/#contact" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Contact</a></li>
     </ul>
-
     <div class="flex items-center gap-3">
-      <button @click="dark=!dark" class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" :aria-label="dark?'Light mode':'Dark mode'">
-        <svg x-show="!dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-        <svg x-show="dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+      <button @click="dark=!dark" class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+        <svg x-show="!dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        <svg x-show="dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
       </button>
       <a href="/page/#contact" class="hidden md:inline-flex items-center gap-2 shimmer bg-accent text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-accent-light transition-colors">
-        Contact me <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        Contact me <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
       </a>
-      <button @click="mobileMenu=!mobileMenu" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700" :aria-expanded="mobileMenu" aria-label="Toggle menu">
-        <svg x-show="!mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-        <svg x-show="mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      <button @click="mobileMenu=!mobileMenu" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700" :aria-expanded="mobileMenu">
+        <svg x-show="!mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg x-show="mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
   </nav>
-
-  <div x-show="mobileMenu" x-cloak
-    x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
-    x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2"
-    class="md:hidden bg-white dark:bg-[#121a15] border-t border-zinc-100 dark:border-zinc-800">
-    <ul class="flex flex-col px-6 py-5 gap-4 text-sm font-medium" role="list">
+  <div x-show="mobileMenu" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="md:hidden bg-white dark:bg-[#121a15] border-t border-zinc-100 dark:border-zinc-800">
+    <ul class="flex flex-col px-6 py-5 gap-4 text-sm font-medium">
       <li><a href="/page/portfolio.html" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Portfolio</a></li>
       <li><a href="/page/blog.html" @click="mobileMenu=false" class="block text-accent font-medium">Blog</a></li>
       <li><a href="/page/cv.html" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">CV</a></li>
@@ -158,29 +182,47 @@
     <div class="max-w-6xl mx-auto px-6 relative z-10">
       <p class="reveal text-xs font-semibold text-accent dark:text-accent-light tracking-widest uppercase mb-3">Thoughts &amp; Stories</p>
       <h1 class="reveal font-display font-bold text-5xl md:text-6xl text-zinc-900 dark:text-white leading-tight mb-4">Blog</h1>
-      <p class="reveal text-lg text-zinc-600 dark:text-zinc-400 max-w-xl leading-relaxed mb-8">Reflections on plant science, biodiversity, creative coding, and the art of science communication.</p>
+      <p class="reveal text-lg text-zinc-600 dark:text-zinc-400 max-w-xl leading-relaxed">Reflections on plant science, biodiversity, creative coding, and the art of science communication.</p>
     </div>
   </section>
 
-  <!-- ═══ BLOG POSTS GRID ═══ -->
+  <!-- ═══ TIMELINE BLOG ═══ -->
   <section class="pb-24">
-    <div class="max-w-6xl mx-auto px-6">
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <template x-for="article in articles" :key="article.id">
-          <a :href="article.url" class="blog-card group h-full rounded-2xl overflow-hidden bg-white dark:bg-[#1e2a23] border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors block">
-            <div class="photo-frame w-full h-52">
-              <img :src="article.image" :alt="article.title" loading="lazy"/>
-            </div>
-            <div class="p-6">
-              <div class="flex flex-wrap gap-2 mb-3">
-                <span class="text-xs px-2.5 py-1 rounded-full border font-medium tag-accent" x-text="article.category"></span>
-                <span class="text-xs px-2.5 py-1 rounded-full border font-medium tag-neutral" x-text="article.date"></span>
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="timeline-line">
+        <template x-for="(article, index) in articles" :key="article.id">
+          <div class="timeline-dot" :class="index === articles.length - 1 ? 'last-item' : ''">
+            <a :href="article.url" class="block group">
+              <div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-all duration-300 overflow-hidden mb-8 group-hover:shadow-lg group-hover:-translate-y-1">
+                <div class="flex flex-col md:flex-row">
+                  <!-- Image -->
+                  <div class="md:w-2/5 photo-frame h-48 md:h-auto">
+                    <img :src="article.image" :alt="article.title" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+                  </div>
+                  <!-- Content -->
+                  <div class="flex-1 p-6 md:p-7">
+                    <div class="flex flex-wrap items-center gap-3 mb-3">
+                      <span class="text-xs px-2.5 py-1 rounded-full border font-medium tag-accent" x-text="article.category"></span>
+                      <span class="text-xs text-zinc-400 dark:text-zinc-500 flex items-center gap-1">
+                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        <span x-text="article.date"></span>
+                      </span>
+                      <span class="text-xs text-zinc-400 dark:text-zinc-500 flex items-center gap-1" x-show="article.readTime">
+                        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span x-text="article.readTime"></span>
+                      </span>
+                    </div>
+                    <h3 class="font-display font-bold text-xl md:text-2xl text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors" x-text="article.title"></h3>
+                    <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed mb-4" x-text="article.excerpt"></p>
+                    <span class="inline-flex items-center gap-2 text-sm font-semibold text-accent group-hover:gap-3 transition-all">
+                      Read article
+                      <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </span>
+                  </div>
+                </div>
               </div>
-              <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors" x-text="article.title"></h3>
-              <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed mb-4" x-text="article.excerpt"></p>
-              <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-accent">Read more →</span>
-            </div>
-          </a>
+            </a>
+          </div>
         </template>
       </div>
     </div>
@@ -225,6 +267,7 @@
           title: 'The Hidden World of Plant Roots',
           date: 'March 15, 2025',
           category: 'Plant Science',
+          readTime: '5 min read',
           image: 'https://images.unsplash.com/photo-1518495973542-65cbb9273ef0?w=800&q=80',
           excerpt: 'Exploring the fascinating underground networks that sustain plant life and how they communicate with each other.',
           url: '/page/blog/plant-roots.html'
@@ -234,6 +277,7 @@
           title: 'Creative Coding for Biodiversity',
           date: 'February 28, 2025',
           category: 'Creative Coding',
+          readTime: '4 min read',
           image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
           excerpt: 'How I use generative art and interactive installations to communicate complex ecological concepts.',
           url: '/page/blog/creative-coding-biodiversity.html'
@@ -243,6 +287,7 @@
           title: 'Biodiversity Conservation: Why Every Species Matters',
           date: 'January 10, 2025',
           category: 'Biodiversity',
+          readTime: '6 min read',
           image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80',
           excerpt: 'A deep dive into the importance of preserving biodiversity and how we can all contribute to conservation efforts.',
           url: '/page/blog/biodiversity-conservation.html'
@@ -252,6 +297,7 @@
           title: 'From Lab to Exhibition: The Science of Visual Storytelling',
           date: 'December 5, 2024',
           category: 'Science Communication',
+          readTime: '5 min read',
           image: 'https://images.unsplash.com/photo-1530023367847-a683933f4172?w=800&q=80',
           excerpt: 'How I translate complex scientific research into engaging visual experiences for public exhibitions.',
           url: '/page/blog/lab-to-exhibition.html'
