@@ -162,14 +162,14 @@
     .dark .bg-accent { background-color: #2D6A4F; }
     .dark .hover\:bg-accent-light:hover { background-color: #409F7A; }
 
-    /* hero forest background */
-.hero-forest {
+    /* top forest background */
+.top-forest {
   background-image: url('images/forest.jpg');
   background-size: cover;
   background-position: center;
   position: relative;
 }
-.hero-forest::before {
+.top-forest::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -178,9 +178,9 @@
   -webkit-backdrop-filter: blur(4px);
   z-index: 1;
 }
-    .hero-forest .relative { z-index: 2; }
+    .top-forest .relative { z-index: 2; }
 /* Dark mode */
-.dark .hero-forest::before {
+.dark .top-forest::before {
   background: rgba(10, 20, 16, 0.6);
 }
   </style>
@@ -240,8 +240,8 @@
 </header>
 <main>
 
-<!-- ═══ HERO with forest background ═══ -->
-<section id="hero" class="relative flex items-center pt-16 overflow-hidden hero-forest">
+<!-- ═══ top with forest background ═══ -->
+<section id="top" class="relative flex items-center pt-16 overflow-hidden top-forest">
   <div class="relative z-10 max-w-6xl mx-auto px-6 py-24 w-full">
     <div class="grid md:grid-cols-2 gap-12 items-center">
 
@@ -530,7 +530,7 @@ function app() {
     dark: false,
     mm: false,
     sc: false,
-    s: 'hero',
+    s: 'top',
 
     init() {
       this.dark = localStorage.getItem('theme') === 'dark' ||
@@ -553,7 +553,7 @@ function app() {
     updateSection() {
       const atBottom = (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 60;
       if (atBottom) { this.s = 'contact'; return; }
-      const ids = ['contact','about','work','services','hero'];
+      const ids = ['contact','about','work','services','top'];
       for (const id of ids) {
         const el = document.getElementById(id);
         if (el && window.scrollY >= el.offsetTop - 130) { this.s = id; return; }
