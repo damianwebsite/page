@@ -553,18 +553,17 @@ function app() {
     },
 
     updateSection() {
-      const atBottom = (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 60;
-      if (atBottom) { this.s = 'contact'; return; }
-      // Only check sections that exist on this page
-      const ids = ['contact', 'about', 'work', 'services', 'top'];
-      for (const id of ids) {
-        const el = document.getElementById(id);
-        if (el && window.scrollY >= el.offsetTop - 130) { 
-          this.s = id; 
-          return; 
-        }
-      }
+  const atBottom = (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 60;
+  if (atBottom) { this.s = 'contact'; return; }
+  const ids = ['contact', 'about', 'work', 'services', 'top'];
+  for (const id of ids) {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 130) { 
+      this.s = id; 
+      return; 
     }
+  }
+}
   }
 }
 </script>
