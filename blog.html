@@ -94,17 +94,6 @@
     .tag-neutral{background-color:#e4e7e5;color:#4a5a52;border-color:#c8d0ca;}
     .dark .tag-neutral{background-color:#2a3a30;color:#a0b8aa;border-color:#3a4a40;}
 
-    /* Article prose */
-    .prose-article h2{font-family:'Space Grotesk',sans-serif;font-size:1.55rem;font-weight:700;margin:2rem 0 1rem;line-height:1.25;color:#1e2a23;}
-    .dark .prose-article h2{color:#e6f0ea;}
-    .prose-article h3{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:600;margin:1.5rem 0 .6rem;line-height:1.3;color:#2D6A4F;}
-    .dark .prose-article h3{color:#409F7A;}
-    .prose-article p{margin:0 0 1.2rem;line-height:1.82;color:#52525b;}
-    .dark .prose-article p{color:#a1a1aa;}
-    .prose-article ul{margin:0 0 1.2rem 1.5rem;list-style:disc;}
-    .prose-article li{margin-bottom:.4rem;line-height:1.7;color:#52525b;}
-    .dark .prose-article li{color:#a1a1aa;}
-
     [x-cloak]{display:none!important;}
   </style>
 </head>
@@ -174,11 +163,11 @@
   </section>
 
   <!-- ═══ BLOG POSTS GRID ═══ -->
-  <section class="pb-24" x-show="!selectedArticle">
+  <section class="pb-24">
     <div class="max-w-6xl mx-auto px-6">
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         <template x-for="article in articles" :key="article.id">
-          <div @click="selectedArticle = article" class="blog-card group h-full rounded-2xl overflow-hidden bg-white dark:bg-[#1e2a23] border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors cursor-pointer">
+          <a :href="article.url" class="blog-card group h-full rounded-2xl overflow-hidden bg-white dark:bg-[#1e2a23] border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors block">
             <div class="photo-frame w-full h-52">
               <img :src="article.image" :alt="article.title" loading="lazy"/>
             </div>
@@ -191,51 +180,8 @@
               <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed mb-4" x-text="article.excerpt"></p>
               <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-accent">Read more →</span>
             </div>
-          </div>
+          </a>
         </template>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ ARTICLE DETAIL VIEW ═══ -->
-  <section class="pb-24" x-show="selectedArticle" x-cloak>
-    <div class="max-w-4xl mx-auto px-6">
-      <!-- Back button -->
-      <button @click="selectedArticle = null" class="inline-flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400 hover:text-accent transition-colors mb-6">
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"/></svg>
-        Back to all articles
-      </button>
-
-      <div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden">
-        <div class="photo-frame w-full h-64 md:h-80">
-          <img :src="selectedArticle.image" :alt="selectedArticle.title" loading="lazy"/>
-        </div>
-        <div class="p-6 md:p-8">
-          <div class="flex flex-wrap gap-2 mb-4">
-            <span class="text-xs px-2.5 py-1 rounded-full border font-medium tag-accent" x-text="selectedArticle.category"></span>
-            <span class="text-xs px-2.5 py-1 rounded-full border font-medium tag-neutral" x-text="selectedArticle.date"></span>
-          </div>
-          <h1 class="font-display font-bold text-3xl md:text-4xl text-zinc-900 dark:text-white mb-6" x-text="selectedArticle.title"></h1>
-          <div class="prose-article" x-html="selectedArticle.content"></div>
-        </div>
-      </div>
-
-      <!-- Related articles -->
-      <div class="mt-12">
-        <h3 class="font-display font-bold text-2xl text-zinc-900 dark:text-white mb-6">More articles</h3>
-        <div class="grid md:grid-cols-3 gap-4">
-          <template x-for="article in articles.filter(a => a.id !== selectedArticle.id).slice(0, 3)" :key="article.id">
-            <div @click="selectedArticle = article" class="blog-card group bg-white dark:bg-[#1e2a23] rounded-xl overflow-hidden border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors cursor-pointer">
-              <div class="photo-frame w-full h-32">
-                <img :src="article.image" :alt="article.title" loading="lazy"/>
-              </div>
-              <div class="p-4">
-                <h4 class="font-display font-bold text-sm text-zinc-900 dark:text-white group-hover:text-accent transition-colors" x-text="article.title"></h4>
-                <p class="text-xs text-zinc-400 mt-1" x-text="article.date"></p>
-              </div>
-            </div>
-          </template>
-        </div>
       </div>
     </div>
   </section>
@@ -271,7 +217,6 @@
       dark: false,
       scrolled: false,
       mobileMenu: false,
-      selectedArticle: null,
       s: 'blog',
 
       articles: [
@@ -282,17 +227,7 @@
           category: 'Plant Science',
           image: 'https://images.unsplash.com/photo-1518495973542-65cbb9273ef0?w=800&q=80',
           excerpt: 'Exploring the fascinating underground networks that sustain plant life and how they communicate with each other.',
-          content: `
-            <p>Roots are often overlooked, yet they are the foundation of plant life. Recent research has revealed that root systems are not just passive anchors—they are active communication hubs.</p>
-            <p>Plants use their roots to share resources, warn each other of threats, and even recognize their kin. This underground network, sometimes called the "wood wide web," is mediated by mycorrhizal fungi that connect plants in a symbiotic relationship.</p>
-            <p>This discovery has profound implications for agriculture. By understanding how roots interact, we can develop more resilient crops and sustainable farming practices.</p>
-            <p><strong>Key takeaways:</strong></p>
-            <ul>
-              <li>Roots communicate through chemical signals</li>
-              <li>Mycorrhizal fungi act as a network connecting plants</li>
-              <li>Understanding root communication can improve crop resilience</li>
-            </ul>
-          `
+          url: '/page/blog/plant-roots.html'
         },
         {
           id: 2,
@@ -301,17 +236,7 @@
           category: 'Creative Coding',
           image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
           excerpt: 'How I use generative art and interactive installations to communicate complex ecological concepts.',
-          content: `
-            <p>Art and science have always been intertwined. In my work, I use creative coding to make complex ecological concepts accessible and engaging.</p>
-            <p>Generative art allows us to visualize data in new ways. For example, I recently created an interactive installation where visitors could generate their own virus-like particles, learning about viral structure in the process.</p>
-            <p>By combining code with ecological data, we can create experiences that inform, inspire, and provoke curiosity about the natural world.</p>
-            <p><strong>Tools I use:</strong></p>
-            <ul>
-              <li>p5.js for generative visuals</li>
-              <li>Pen plotting for physical art</li>
-              <li>Interactive web experiences with Alpine.js</li>
-            </ul>
-          `
+          url: '/page/blog/creative-coding-biodiversity.html'
         },
         {
           id: 3,
@@ -320,18 +245,7 @@
           category: 'Biodiversity',
           image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80',
           excerpt: 'A deep dive into the importance of preserving biodiversity and how we can all contribute to conservation efforts.',
-          content: `
-            <p>Biodiversity is the foundation of life on Earth. Every species, from the smallest microbe to the largest tree, plays a role in maintaining healthy ecosystems.</p>
-            <p>Yet, we are losing species at an alarming rate. Habitat destruction, climate change, and pollution are driving a sixth mass extinction event.</p>
-            <p>But there is hope. Conservation efforts around the world are making a difference. By protecting natural habitats, reducing pollution, and supporting sustainable practices, we can help preserve biodiversity for future generations.</p>
-            <p><strong>What you can do:</strong></p>
-            <ul>
-              <li>Support conservation organizations</li>
-              <li>Reduce your environmental footprint</li>
-              <li>Educate others about biodiversity</li>
-              <li>Plant native species in your garden</li>
-            </ul>
-          `
+          url: '/page/blog/biodiversity-conservation.html'
         },
         {
           id: 4,
@@ -340,17 +254,7 @@
           category: 'Science Communication',
           image: 'https://images.unsplash.com/photo-1530023367847-a683933f4172?w=800&q=80',
           excerpt: 'How I translate complex scientific research into engaging visual experiences for public exhibitions.',
-          content: `
-            <p>Science communication is about more than just presenting facts—it's about telling stories that resonate. My approach combines scientific accuracy with artistic creativity.</p>
-            <p>In my exhibitions, I use photography, generative art, and interactive elements to invite visitors to explore scientific concepts at their own pace. The goal is not just to inform, but to inspire wonder and curiosity.</p>
-            <p>One of my most successful projects was an exhibition about plant roots, where visitors could see real root systems and interact with a generative visualization of root growth.</p>
-            <p><strong>Key principles:</strong></p>
-            <ul>
-              <li>Make science accessible and engaging</li>
-              <li>Use visuals to explain complex concepts</li>
-              <li>Create opportunities for hands-on exploration</li>
-            </ul>
-          `
+          url: '/page/blog/lab-to-exhibition.html'
         }
       ],
 
