@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" x-data="projects()" :class="{'dark':dark}" x-init="init()" class="scroll-smooth">
+<html lang="en" x-data="portfolio()" :class="{'dark':dark}" x-init="init()" class="scroll-smooth">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -42,7 +42,6 @@
     html,body{font-family:'Inter',sans-serif;background-color:#f5f9f6;transition:background-color .3s,color .3s;}
     h1,h2,h3,h4,h5,h6{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:-0.02em;}
 
-    /* Dark mode overrides */
     .dark body{background-color:#121a15;}
     .dark .bg-white{background-color:#1e2a23;}
     .dark .bg-zinc-50{background-color:#1a261f;}
@@ -52,10 +51,8 @@
     .dark .text-zinc-400{color:#8aa898;}
     .dark .bg-zinc-100{background-color:#2a3a30;}
 
-    /* Noise overlay */
     body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.12;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");}
 
-    /* Scrollbar - Forest Green (matching index.html) */
     ::-webkit-scrollbar{width:10px;}
     ::-webkit-scrollbar-track{background:transparent;}
     ::-webkit-scrollbar-thumb{background:#2D6A4F;border-radius:99px;}
@@ -65,34 +62,37 @@
     *{scrollbar-width:thin;scrollbar-color:#2D6A4F transparent;}
     .dark *{scrollbar-color:#409F7A transparent;}
 
-    /* Reveal animation */
     .reveal{opacity:0;transform:translateY(22px);transition:opacity .55s cubic-bezier(.4,0,.2,1),transform .55s cubic-bezier(.4,0,.2,1);}
     .reveal.visible{opacity:1;transform:translateY(0);}
 
-    /* Nav underline - matching index.html exactly */
     .nl{position:relative;}
     .nl::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:currentColor;transition:width .22s cubic-bezier(.4,0,.2,1);}
     .nl:hover::after,.nl.on::after{width:100%;}
     .nl.on{font-weight:600;}
 
-    /* Shimmer button */
     .shimmer{position:relative;overflow:hidden;}
     .shimmer::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:rgba(255,255,255,.18);transform:skewX(-20deg);transition:left .4s cubic-bezier(.4,0,.2,1);}
     .shimmer:hover::after{left:160%;}
 
-    /* Photo frame */
     .photo-frame{position:relative;overflow:hidden;background:#d4d8d0;}
     .photo-frame img{width:100%;height:100%;object-fit:cover;display:block;}
 
-    /* Project card */
-    .project-card{transition:transform .28s cubic-bezier(.4,0,.2,1),border-color .18s;}
+    .project-card{transition:transform .28s cubic-bezier(.4,0,.2,1),border-color .18s;cursor:pointer;}
     .project-card:hover{transform:translateY(-4px);border-color:#2D6A4F;}
 
-    /* Tags */
     .tag-accent{background-color:#e6f0ea;color:#2D6A4F;border-color:#95b8a7;}
     .dark .tag-accent{background-color:#1e2a23;color:#409F7A;border-color:#2a3a30;}
     .tag-neutral{background-color:#e4e7e5;color:#4a5a52;border-color:#c8d0ca;}
     .dark .tag-neutral{background-color:#2a3a30;color:#a0b8aa;border-color:#3a4a40;}
+
+    /* Modal overlay */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);z-index:999;display:flex;align-items:center;justify-content:center;padding:1.5rem;overflow-y:auto;}
+    .dark .modal-overlay{background:rgba(0,0,0,0.8);}
+    .modal-content{max-width:900px;width:100%;max-height:90vh;overflow-y:auto;}
+
+    /* Responsive iframe container */
+    .iframe-container{position:relative;overflow:hidden;width:100%;padding-top:56.25%;}
+    .iframe-container iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;}
 
     [x-cloak]{display:none!important;}
   </style>
@@ -102,57 +102,48 @@
 
 <!-- ═══ NAV ═══ -->
 <header class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
-  :class="sc?'bg-white/90 dark:bg-[#121a15]/90 backdrop-blur-md shadow-sm shadow-black/5':''">
-  <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between" aria-label="Main navigation">
-
-    <a href="/page/" class="font-display font-bold text-xl tracking-tight relative z-10">
-      <span class="text-zinc-900 dark:text-white">Damian </span><span class="text-accent"> Boer</span>
+  :class="scrolled?'bg-white/90 dark:bg-[#121a15]/90 backdrop-blur-md shadow-sm shadow-black/5':''">
+  <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <a href="/page/" class="font-display font-bold text-xl tracking-tight z-10">
+      <span class="text-zinc-900 dark:text-white">Damian </span><span class="text-accent">Boer</span>
     </a>
-
-    <ul class="hidden md:flex items-center gap-8 text-sm font-medium" role="list">
-      <li><a href="/page/portfolio.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='portfolio'?'on !text-zinc-900 dark:!text-white':''">Portfolio</a></li>
-      <li><a href="/page/blog.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='blog'?'on !text-zinc-900 dark:!text-white':''">Blog</a></li>
-      <li><a href="/page/cv.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='cv'?'on !text-zinc-900 dark:!text-white':''">CV</a></li>
-      <li><a href="/page/#about" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='about'?'on !text-zinc-900 dark:!text-white':''">About</a></li>
-      <li><a href="/page/#contact" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors" :class="s==='contact'?'on !text-zinc-900 dark:!text-white':''">Contact</a></li>
+    <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
+      <li><a href="/page/portfolio.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors on !text-zinc-900 dark:!text-white">Portfolio</a></li>
+      <li><a href="/page/blog.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Blog</a></li>
+      <li><a href="/page/cv.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">CV</a></li>
+      <li><a href="/page/#about" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">About</a></li>
+      <li><a href="/page/#contact" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Contact</a></li>
     </ul>
-
     <div class="flex items-center gap-3">
-      <!-- dark toggle -->
-      <button @click="dark=!dark" class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" :aria-label="dark?'Light mode':'Dark mode'">
-        <svg x-show="!dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-        <svg x-show="dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+      <button @click="dark=!dark" class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+        <svg x-show="!dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        <svg x-show="dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
       </button>
-      <!-- Contact me button -->
       <a href="/page/#contact" class="hidden md:inline-flex items-center gap-2 shimmer bg-accent text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-accent-light transition-colors">
-        Contact me <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        Contact me <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
       </a>
-      <!-- hamburger -->
-      <button @click="mm=!mm" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700" :aria-expanded="mm" aria-label="Toggle menu">
-        <svg x-show="!mm" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-        <svg x-show="mm" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      <button @click="mobileMenu=!mobileMenu" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700">
+        <svg x-show="!mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg x-show="mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
   </nav>
-
-  <!-- mobile menu -->
-  <div x-show="mm" x-cloak
-    x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
-    x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2"
-    class="md:hidden bg-white dark:bg-[#121a15] border-t border-zinc-100 dark:border-zinc-800">
-    <ul class="flex flex-col px-6 py-5 gap-4 text-sm font-medium" role="list">
-      <li><a href="/page/portfolio.html" @click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Portfolio</a></li>
-      <li><a href="/page/blog.html" @click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Blog</a></li>
-      <li><a href="/page/cv.html" @click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">CV</a></li>
-      <li><a href="/page/#about" @click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">About</a></li>
-      <li><a href="/page/#contact" @click="mm=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Contact</a></li>
+  <div x-show="mobileMenu" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="md:hidden bg-white dark:bg-[#121a15] border-t border-zinc-100 dark:border-zinc-800">
+    <ul class="flex flex-col px-6 py-5 gap-4 text-sm font-medium">
+      <li><a href="/page/portfolio.html" @click="mobileMenu=false" class="block text-accent font-medium">Portfolio</a></li>
+      <li><a href="/page/blog.html" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Blog</a></li>
+      <li><a href="/page/cv.html" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">CV</a></li>
+      <li><a href="/page/#about" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">About</a></li>
+      <li><a href="/page/#contact" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Contact</a></li>
       <li class="pt-2 border-t border-zinc-100 dark:border-zinc-800">
-        <a href="/page/#contact" @click="mm=false" class="inline-flex shimmer bg-accent text-white font-semibold text-sm px-5 py-2.5 rounded-full">Contact me →</a>
+        <a href="/page/#contact" @click="mobileMenu=false" class="inline-flex shimmer bg-accent text-white font-semibold text-sm px-5 py-2.5 rounded-full">Contact me →</a>
       </li>
     </ul>
   </div>
 </header>
+
 <main>
+
   <!-- ═══ HERO ═══ -->
   <section class="pt-36 pb-12 relative overflow-hidden">
     <div class="absolute top-0 right-0 w-80 h-80 bg-accent/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -163,12 +154,7 @@
       <p class="reveal text-lg text-zinc-600 dark:text-zinc-400 max-w-xl leading-relaxed mb-8">A complete look at my work across research, science communication, photography, and creative coding.</p>
       <div class="reveal flex flex-wrap gap-2">
         <template x-for="f in filterOptions" :key="f.value">
-          <button
-            @click="filter = f.value"
-            :class="filter === f.value ? 'bg-accent text-white border-accent' : 'bg-white dark:bg-[#1e2a23] text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 hover:border-accent'"
-            class="text-sm px-4 py-1.5 rounded-full border transition-colors font-medium"
-            x-text="f.label">
-          </button>
+          <button @click="filter = f.value" :class="filter === f.value ? 'bg-accent text-white border-accent' : 'bg-white dark:bg-[#1e2a23] text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-zinc-700 hover:border-accent'" class="text-sm px-4 py-1.5 rounded-full border transition-colors font-medium" x-text="f.label"></button>
         </template>
       </div>
     </div>
@@ -178,45 +164,93 @@
   <section class="pb-24">
     <div class="max-w-6xl mx-auto px-6">
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <template x-for="p in allProjects" :key="p.id">
-          <div
-            x-show="filter === 'all' || p.category === filter"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 scale-95 translate-y-2"
-            x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 scale-100"
-            x-transition:leave-end="opacity-0 scale-95">
-            <article class="project-card group h-full rounded-2xl overflow-hidden bg-white dark:bg-[#1e2a23] border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors">
-              <a :href="p.url" class="block photo-frame w-full h-52">
-                <img :src="p.img" :alt="p.title" loading="lazy"/>
-              </a>
-              <div class="p-6">
-                <div class="flex flex-wrap gap-2 mb-3">
-                  <template x-for="tag in p.tags" :key="tag">
-                    <span class="text-xs px-2.5 py-1 rounded-full border font-medium"
-                      :class="tag === p.categoryLabel ? 'tag-accent' : 'tag-neutral'"
-                      x-text="tag"></span>
-                  </template>
-                </div>
-                <a :href="p.url">
-                  <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors" x-text="p.title"></h3>
-                </a>
-                <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed mb-4" x-text="p.desc"></p>
-                <div class="flex items-center justify-between">
-                  <a :href="p.url" class="inline-flex items-center gap-1.5 text-sm font-semibold text-zinc-900 dark:text-white nl">View project →</a>
-                  <span class="text-xs text-zinc-500 dark:text-zinc-400" x-text="p.year"></span>
-                </div>
+        <template x-for="p in filteredProjects" :key="p.id">
+          <div @click="openProject(p)" class="project-card group h-full rounded-2xl overflow-hidden bg-white dark:bg-[#1e2a23] border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors">
+            <div class="photo-frame w-full h-52">
+              <img :src="p.img" :alt="p.title" loading="lazy"/>
+            </div>
+            <div class="p-6">
+              <div class="flex flex-wrap gap-2 mb-3">
+                <template x-for="tag in p.tags" :key="tag">
+                  <span class="text-xs px-2.5 py-1 rounded-full border font-medium" :class="tag === p.categoryLabel ? 'tag-accent' : 'tag-neutral'" x-text="tag"></span>
+                </template>
               </div>
-            </article>
+              <h3 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-2 group-hover:text-accent transition-colors" x-text="p.title"></h3>
+              <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed mb-4" x-text="p.desc"></p>
+              <div class="flex items-center justify-between">
+                <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-accent">View details →</span>
+                <span class="text-xs text-zinc-500 dark:text-zinc-400" x-text="p.year"></span>
+              </div>
+            </div>
           </div>
         </template>
       </div>
-      <div x-show="visibleCount === 0" x-cloak class="text-center py-20">
+      <div x-show="filteredProjects.length === 0" x-cloak class="text-center py-20">
         <p class="text-zinc-500 dark:text-zinc-400 text-sm">No projects in this category yet.</p>
       </div>
     </div>
   </section>
+
+  <!-- ═══ PROJECT DETAIL MODAL ═══ -->
+  <div x-show="selectedProject" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" class="modal-overlay" @click.self="closeProject()">
+    <div class="modal-content" @click.stop>
+      <div class="bg-white dark:bg-[#1e2a23] rounded-2xl overflow-hidden border border-zinc-100 dark:border-zinc-700 shadow-2xl">
+        <!-- Close button -->
+        <button @click="closeProject()" class="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-black/20 hover:bg-black/40 text-white transition-colors">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+
+        <!-- Hero Image -->
+        <div class="photo-frame w-full h-64 md:h-80 relative">
+          <img :src="selectedProject.img" :alt="selectedProject.title" loading="lazy"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+          <div class="absolute bottom-6 left-6 right-6">
+            <div class="flex flex-wrap gap-2 mb-3">
+              <template x-for="tag in selectedProject.tags" :key="tag">
+                <span class="text-xs px-2.5 py-1 rounded-full border font-medium bg-white/20 text-white border-white/30 backdrop-blur-sm" x-text="tag"></span>
+              </template>
+            </div>
+            <h2 class="font-display font-bold text-3xl md:text-4xl text-white" x-text="selectedProject.title"></h2>
+            <p class="text-white/80 text-sm mt-1" x-text="selectedProject.year"></p>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="p-6 md:p-8">
+          <div class="prose-article max-w-none">
+            <div x-html="selectedProject.fullContent"></div>
+          </div>
+
+          <!-- Iframe embed (if applicable) -->
+          <div x-show="selectedProject.embedUrl" class="mt-6">
+            <h4 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-3">Interactive Demo</h4>
+            <div class="iframe-container rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-700">
+              <iframe :src="selectedProject.embedUrl" allowfullscreen loading="lazy"></iframe>
+            </div>
+          </div>
+
+          <!-- Gallery (if applicable) -->
+          <div x-show="selectedProject.gallery && selectedProject.gallery.length > 0" class="mt-6">
+            <h4 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-3">Gallery</h4>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <template x-for="(img, idx) in selectedProject.gallery" :key="idx">
+                <div class="photo-frame rounded-xl h-32">
+                  <img :src="img" :alt="'Gallery image ' + (idx+1)" loading="lazy"/>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <!-- Links -->
+          <div x-show="selectedProject.links" class="mt-6 flex flex-wrap gap-3">
+            <template x-for="link in selectedProject.links" :key="link.url">
+              <a :href="link.url" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 bg-accent text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-accent-light transition-colors" x-text="link.label"></a>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ═══ CTA ═══ -->
   <section class="pb-24">
@@ -233,6 +267,7 @@
       </div>
     </div>
   </section>
+
 </main>
 
 <!-- ═══ FOOTER ═══ -->
@@ -243,12 +278,13 @@
 </footer>
 
 <script>
-  function projects() {
+  function portfolio() {
     return {
       dark: false,
       scrolled: false,
       mobileMenu: false,
       filter: 'all',
+      selectedProject: null,
 
       filterOptions: [
         { value: 'all', label: 'All' },
@@ -266,103 +302,204 @@
           categoryLabel: 'Science Communication',
           tags: ['Science Communication', 'Workshops', 'Non-profit'],
           year: '2023-Present',
-          desc: 'Non-profit bringing plant science to communities through workshops, exhibitions, and educational materials. Reached 340+ participants across 8 schools.',
+          desc: 'Non-profit bringing plant science to communities through workshops, exhibitions, and educational materials.',
           img: 'https://images.unsplash.com/photo-1530023367847-a683933f4172?w=700&q=80',
-          url: 'case-study.html'
+          fullContent: `
+            <p><strong>GeneSprout Initiative</strong> is a non-profit organization I founded to bring plant science to communities through workshops, exhibitions, and educational materials.</p>
+            <p>We've reached <strong>340+ participants</strong> across <strong>8 schools</strong>, teaching about genetic editing (New Breeding Techniques) through hands-on activities and dialogue sessions.</p>
+            <p>The initiative includes:</p>
+            <ul>
+              <li>Interactive workshops for primary and secondary schools</li>
+              <li>Educational materials and lesson plans</li>
+              <li>Public exhibitions and street science events</li>
+              <li>Online resources and a dedicated website</li>
+            </ul>
+          `,
+          links: [
+            { label: 'Visit Website →', url: 'https://www.genesproutinitiative.com/' }
+          ]
         },
         {
           id: 2,
-          title: 'BLABLA Exhibition',
+          title: 'Polar Blues, Island Hues Exhibition',
           category: 'photography',
           categoryLabel: 'Photography',
           tags: ['Photography', 'Exhibition', 'Fine Art'],
           year: '2024',
-          desc: 'BLABLABLABLA',
+          desc: 'A photographic exploration contrasting the landscapes of Antarctica and Okinawa.',
           img: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=700&q=80',
-          url: 'case-study.html'
+          fullContent: `
+            <p><strong>Polar Blues, Island Hues</strong> was an exhibition at the OIST Tunnel Gallery in Okinawa, Japan (April 2025).</p>
+            <p>The exhibition presented stunning images of Antarctica and Okinawa, offering a visual journey through their contrasting landscapes. It emerged from a transformative experience where more than 100 women in STEMM travelled to Antarctica to witness firsthand the profound effects of climate change.</p>
+            <p>My contribution featured photography of Okinawa's botanically rich landscape, highlighting the delicate ecosystems that are threatened by climate change.</p>
+          `,
+          links: [
+            { label: 'Exhibition Page →', url: 'https://groups.oist.jp/culture/event/polar-blues-island-hues-contrasting-colors-okinawa-and-antarctica' }
+          ]
         },
         {
           id: 3,
-          title: 'BLABLABLA code',
+          title: 'Viral Art — Generative Installation',
           category: 'creative',
           categoryLabel: 'Creative Coding',
-          tags: ['Children\'s Book', 'Illustration', 'In Progress'],
-          year: '2024-Present',
-          desc: 'BLABLABLABLA',
+          tags: ['Creative Coding', 'Interactive', 'Generative Art'],
+          year: '2024',
+          desc: 'An interactive generative art project where visitors generate their own virus-like particles.',
           img: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=700&q=80',
-          url: 'case-study.html'
+          fullContent: `
+            <p><strong>Viral Art</strong> is an interactive generative art project coded in p5.js that invites visitors to explore the beauty of viruses.</p>
+            <p>Participants can generate their own virus-like particles in real-time, learning about viral structure and diversity through play. The project was exhibited at a Science x Art exposition in Wageningen.</p>
+            <p>The installation combines:</p>
+            <ul>
+              <li>Real-time generative visuals</li>
+              <li>Interactive controls for visitors</li>
+              <li>Educational context about viruses</li>
+            </ul>
+          `,
+          embedUrl: 'https://openprocessing.org/sketch/YOUR_SKETCH_ID/embed/',
+          links: [
+            { label: 'View on OpenProcessing →', url: 'https://openprocessing.org/sketch/YOUR_SKETCH_ID/' }
+          ]
         },
         {
           id: 4,
-          title: 'BLABLA Research',
+          title: 'Forest Canopy Research',
           category: 'research',
           categoryLabel: 'Research',
           tags: ['Plant Ecology', 'Field Work', 'Data Analysis'],
           year: '2023-2024',
-          desc: 'BLABLABLABLA',
-          img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=700&q=80',
-          url: 'case-study.html'
+          desc: 'Field research on forest canopy biodiversity in temperate ecosystems.',
+          img: 'https://images.unsplash.com/photo-1518495973542-65cbb9273ef0?w=700&q=80',
+          fullContent: `
+            <p><strong>Forest Canopy Research</strong> investigated biodiversity patterns in temperate forest canopies.</p>
+            <p>Combining traditional ecological surveys with drone-based remote sensing, we mapped species distributions and identified key factors influencing canopy biodiversity.</p>
+            <p><strong>Key findings:</strong></p>
+            <ul>
+              <li>Canopy structure significantly influences epiphyte diversity</li>
+              <li>Microclimate variation drives species composition</li>
+              <li>Remote sensing can predict biodiversity hotspots</li>
+            </ul>
+          `
         },
         {
           id: 5,
-          title: 'BLABLA code',
+          title: 'Interactive Plant Map',
           category: 'creative',
           categoryLabel: 'Creative Coding',
           tags: ['Creative Coding', 'Interactive', 'WebGL'],
           year: '2024',
-          desc: 'BLABLABLA',
+          desc: 'A WebGL visualization exploring plant biodiversity data in real-time.',
           img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=700&q=80',
-          url: 'case-study.html'
+          fullContent: `
+            <p><strong>Interactive Plant Map</strong> is a WebGL visualization that allows users to explore plant biodiversity data.</p>
+            <p>Users can interact with species distributions, filter by ecological traits, and discover patterns in plant diversity across different regions.</p>
+            <p>Built with Three.js and D3.js, the project combines:</p>
+            <ul>
+              <li>Real-time data visualization</li>
+              <li>Interactive filtering and exploration</li>
+              <li>Educational context about biodiversity</li>
+            </ul>
+          `,
+          embedUrl: 'https://openprocessing.org/sketch/YOUR_SKETCH_ID/embed/'
         },
         {
           id: 6,
-          title: 'BLABLA Science Communication',
+          title: 'Science Communication Workshop Series',
           category: 'scicomm',
           categoryLabel: 'Science Communication',
           tags: ['Workshops', 'Education', 'Outreach'],
           year: '2024',
-          desc: 'BLABLABLA',
+          desc: 'Hands-on workshops teaching scientists to communicate their research effectively.',
           img: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=700&q=80',
-          url: 'case-study.html'
+          fullContent: `
+            <p><strong>Science Communication Workshop Series</strong> empowers scientists to share their research with broader audiences.</p>
+            <p>Participants learn:</p>
+            <ul>
+              <li>Visual storytelling techniques</li>
+              <li>Photography for science communication</li>
+              <li>Data visualization best practices</li>
+              <li>Engaging presentation skills</li>
+            </ul>
+            <p>The workshops have trained over 50 scientists across multiple institutions.</p>
+          `
         },
         {
           id: 7,
-          title: 'BLABLA Photo project',
+          title: 'Botanical Photography Collection',
           category: 'photography',
           categoryLabel: 'Photography',
           tags: ['Photography', 'Botanical', 'Fine Art'],
           year: '2023-2024',
-          desc: 'BLABLABLA',
+          desc: 'A fine art series exploring the intricate details of plant structures.',
           img: 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=700&q=80',
-          url: 'case-study.html'
+          fullContent: `
+            <p><strong>Botanical Photography Collection</strong> is a fine art series exploring the intricate details of plant structures.</p>
+            <p>From delicate petals to complex root systems, each image reveals the hidden beauty of the plant world. The collection has been featured in:</p>
+            <ul>
+              <li>Uitwaaien Magazine (multiple editions)</li>
+              <li>Local art exhibitions</li>
+              <li>Municipal photography competitions (Winner 2024)</li>
+            </ul>
+          `,
+          links: [
+            { label: 'View Magazine →', url: 'https://uitwaaienmagazine.nl/pdfs/fourthEdition.pdf' }
+          ]
         },
         {
           id: 8,
-          title: 'BLABLA Research',
+          title: 'Biodiversity Data Visualization',
           category: 'research',
           categoryLabel: 'Research',
           tags: ['Data Viz', 'Biodiversity', 'R'],
           year: '2023',
-          desc: 'BLABLABLA',
+          desc: 'Interactive visualizations of biodiversity patterns across Europe.',
           img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=700&q=80',
-          url: 'case-study.html'
+          fullContent: `
+            <p><strong>Biodiversity Data Visualization</strong> combines open datasets with custom R scripts and D3.js to reveal patterns in European biodiversity.</p>
+            <p>The project visualizes:</p>
+            <ul>
+              <li>Species distribution patterns</li>
+              <li>Biodiversity hotspots</li>
+              <li>Threatened species clusters</li>
+            </ul>
+            <p>All visualizations are open-source and designed for public engagement with conservation science.</p>
+          `
         },
         {
           id: 9,
-          title: 'BLABLABLA',
+          title: 'Creative Coding for Scientists',
           category: 'creative',
           categoryLabel: 'Creative Coding',
           tags: ['Creative Coding', 'Workshops', 'Education'],
           year: '2024',
-          desc: 'BLABLABLA',
+          desc: 'Workshops teaching scientists to use creative coding for research communication.',
           img: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=700&q=80',
-          url: 'case-study.html'
-        },
+          fullContent: `
+            <p><strong>Creative Coding for Scientists</strong> is a workshop series teaching scientists to use programming for visual communication.</p>
+            <p>Participants learn to use:</p>
+            <ul>
+              <li>p5.js for generative visuals</li>
+              <li>Processing for data art</li>
+              <li>Interactive web experiences</li>
+            </ul>
+            <p>The workshops focus on making complex scientific concepts accessible through creative programming.</p>
+          `
+        }
       ],
 
-      get visibleCount() {
-        if (this.filter === 'all') return this.allProjects.length;
-        return this.allProjects.filter(p => p.category === this.filter).length;
+      get filteredProjects() {
+        if (this.filter === 'all') return this.allProjects;
+        return this.allProjects.filter(p => p.category === this.filter);
+      },
+
+      openProject(project) {
+        this.selectedProject = project;
+        document.body.style.overflow = 'hidden';
+      },
+
+      closeProject() {
+        this.selectedProject = null;
+        document.body.style.overflow = '';
       },
 
       init() {
@@ -372,6 +509,11 @@
         window.addEventListener('scroll', () => {
           this.scrolled = window.scrollY > 20;
         }, { passive: true });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') this.closeProject();
+        });
 
         this.$nextTick(() => {
           const obs = new IntersectionObserver(entries => {
@@ -390,5 +532,6 @@
 
   document.getElementById('year').textContent = new Date().getFullYear();
 </script>
+
 </body>
 </html>
