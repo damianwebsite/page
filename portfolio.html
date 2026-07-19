@@ -241,9 +241,9 @@
 <!-- Gallery (larger thumbnails) - Only show if no largeImage -->
 <div x-show="selectedProject.gallery && selectedProject.gallery.length > 0 && !selectedProject.largeImage" class="mt-6">
   <h4 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-3">Gallery</h4>
-  <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+  <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
     <template x-for="(img, idx) in selectedProject.gallery" :key="idx">
-      <div class="photo-frame rounded-xl h-48 md:h-56">
+      <div class="photo-frame rounded-xl h-80">
         <img :src="img" :alt="'Gallery image ' + (idx+1)" loading="lazy"/>
       </div>
     </template>
