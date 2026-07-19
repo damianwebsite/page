@@ -238,17 +238,17 @@
           </div>
         </div>
 
-        <!-- Gallery (small thumbnails) - Only show if no largeImage -->
-        <div x-show="selectedProject.gallery && selectedProject.gallery.length > 0 && !selectedProject.largeImage" class="mt-6">
-          <h4 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-3">Gallery</h4>
-          <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-            <template x-for="(img, idx) in selectedProject.gallery" :key="idx">
-              <div class="photo-frame rounded-xl h-32">
-                <img :src="img" :alt="'Gallery image ' + (idx+1)" loading="lazy"/>
-              </div>
-            </template>
-          </div>
-        </div>
+<!-- Gallery (larger thumbnails) - Only show if no largeImage -->
+<div x-show="selectedProject.gallery && selectedProject.gallery.length > 0 && !selectedProject.largeImage" class="mt-6">
+  <h4 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-3">Gallery</h4>
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+    <template x-for="(img, idx) in selectedProject.gallery" :key="idx">
+      <div class="photo-frame rounded-xl h-48 md:h-56">
+        <img :src="img" :alt="'Gallery image ' + (idx+1)" loading="lazy"/>
+      </div>
+    </template>
+  </div>
+</div>
 
         <!-- Links -->
         <div x-show="selectedProject.links" class="mt-6 flex flex-wrap gap-3">
