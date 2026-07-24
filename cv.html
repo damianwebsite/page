@@ -199,13 +199,15 @@
       <div class="flex-1">
         <h3 class="font-display font-bold text-2xl text-zinc-900 dark:text-white mb-2">About Me</h3>
         <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed mb-3">
-          I am a plant scientist, photographer, and creative communicator with a deep-rooted passion for biodiversity and the natural world. I aim to document, understand, and communicate the beauty and importance of plant diversity.
+          I am a plant scientist, photographer, and creative communicator with a passion for biodiversity. 
+          Documenting, understanding, and communicating about the beauty and importance of plant diversity are things I really enjoy;
         </p>
         <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed mb-3">
-          Whether through research, photography, or interactive art, I strive to make the hidden world of plants visible, accessible, and captivating.
+          whether through research, photography, or interactive art... I strive to make world of plants visible, interesting, and captivating.
         </p>
         <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">
-          I am currently seeking a position where I can creatively stimulate biodiversity and biodiversity awareness — from documenting plant diversity in the field to developing engaging educational content, exhibitions, or media projects.
+          I am currently seeking a position where I can creatively stimulate biodiversity and biodiversity awareness 
+          — from documenting plant diversity in the field to developing engaging educational content, exhibitions, or media projects.
         </p>
       </div>
     </div>
@@ -223,10 +225,6 @@
       <div class="bg-white dark:bg-[#1e2a23] rounded-xl p-3 text-center border border-zinc-100 dark:border-zinc-700">
         <p class="font-display font-bold text-xl text-accent">∞</p>
         <p class="text-[10px] text-zinc-500 dark:text-zinc-400">Passion for biodiversity &amp; creativity</p>
-      </div>
-      <div class="bg-white dark:bg-[#1e2a23] rounded-xl p-3 text-center border border-zinc-100 dark:border-zinc-700">
-        <p class="font-display font-bold text-xl text-accent">5+</p>
-        <p class="text-[10px] text-zinc-500 dark:text-zinc-400">Years experience</p>
       </div>
       <div class="bg-white dark:bg-[#1e2a23] rounded-xl p-3 text-center border border-zinc-100 dark:border-zinc-700">
         <p class="font-display font-bold text-xl text-accent">4</p>
@@ -512,61 +510,130 @@
         </div>
       </div>
 
-      <!-- Awards Section -->
-      <div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden"
-           x-data="{ open: false }"
-           @mouseenter="open = true"
-           @mouseleave="open = false">
-        <button @click="open = !open" class="w-full flex items-center justify-between p-5 text-left hover:bg-[#e6f0ea]/50 dark:hover:bg-zinc-800/30 transition-colors cursor-pointer">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-[#e6f0ea] dark:bg-zinc-800 rounded-lg flex items-center justify-center">
-              <svg class="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-              </svg>
-            </div>
-            <span class="font-display font-bold text-lg text-zinc-900 dark:text-white">Awards</span>
-            <span class="text-xs text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-2.5 py-0.5 rounded-full">5 entries</span>
-          </div>
-          <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-          </svg>
-        </button>
-        <div x-show="open" x-collapse>
-          <div class="px-5 pb-5">
-            <div class="grid md:grid-cols-2 gap-3">
-              <div class="border-l-2 border-accent pl-4">
-                <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Leader of Tomorrow &amp; Voices of Tomorrow Winner</h4>
-                <p class="text-sm text-zinc-500 dark:text-zinc-400">Selected as one of the 100 global future leaders in biotechnology. Won a start-up competition at Cambridge University</p>
-                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full inline-block mt-1">2018</span>
-              </div>
-              <div class="border-l-2 border-accent pl-4">
-                <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">MSc cum laude (distinction)</h4>
-                <p class="text-sm text-zinc-500 dark:text-zinc-400">Wageningen University &amp; Research</p>
-                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full inline-block mt-1">2018</span>
-              </div>
-              <div class="border-l-2 border-accent pl-4">
-                <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Netherlands-Asia Honours Programme</h4>
-                <p class="text-sm text-zinc-500 dark:text-zinc-400">Peking University • National honours</p>
-                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full inline-block mt-1">2016</span>
-              </div>
-              <div class="border-l-2 border-accent pl-4">
-                <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Follow-up Winner photography competition: Wageningen in 2045</h4>
-                <p class="text-sm text-zinc-500 dark:text-zinc-400">Municipality of Wageningen</p>
-                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full inline-block mt-1">2024</span>
-              </div>
-              <div class="border-l-2 border-accent pl-4">
-                <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Sports champion</h4>
-                <p class="text-sm text-zinc-500 dark:text-zinc-400">Three-fold champion in badminton, three-fold champion in tennis</p>
-                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full inline-block mt-1">Multiple years</span>
-              </div>
-            </div>
-          </div>
+<!-- Awards Section -->
+<div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden"
+     x-data="{ open: false }"
+     @mouseenter="open = true"
+     @mouseleave="open = false">
+  <button @click="open = !open" class="w-full flex items-center justify-between p-5 text-left hover:bg-[#e6f0ea]/50 dark:hover:bg-zinc-800/30 transition-colors cursor-pointer">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-[#e6f0ea] dark:bg-zinc-800 rounded-lg flex items-center justify-center">
+        <svg class="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+        </svg>
+      </div>
+      <span class="font-display font-bold text-lg text-zinc-900 dark:text-white">Awards &amp; Honours</span>
+      <span class="text-xs text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-2.5 py-0.5 rounded-full">6 entries</span>
+    </div>
+    <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+    </svg>
+  </button>
+  <div x-show="open" x-collapse>
+    <div class="px-5 pb-5">
+      <div class="grid md:grid-cols-2 gap-3">
+        <div class="border-l-2 border-accent pl-4">
+          <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Leader of Tomorrow &amp; Voices of Tomorrow Winner</h4>
+          <p class="text-sm text-zinc-500 dark:text-zinc-400">Selected as one of the 100 global future leaders in biotechnology. Won a start-up competition at Cambridge University</p>
+          <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full inline-block mt-1">2018</span>
+        </div>
+        <div class="border-l-2 border-accent pl-4">
+          <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">MSc cum laude (distinction)</h4>
+          <p class="text-sm text-zinc-500 dark:text-zinc-400">Wageningen University &amp; Research</p>
+          <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full inline-block mt-1">2018</span>
+        </div>
+        <div class="border-l-2 border-accent pl-4">
+          <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Netherlands-Asia Honours Programme</h4>
+          <p class="text-sm text-zinc-500 dark:text-zinc-400">Peking University • National honours</p>
+          <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full inline-block mt-1">2016</span>
+        </div>
+        <div class="border-l-2 border-accent pl-4">
+          <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Studium Generale</h4>
+          <p class="text-sm text-zinc-500 dark:text-zinc-400">Selective self-development programme for Dutch students interested in developing academic abilities such as reflection and global citizenship.</p>
+          <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full inline-block mt-1">2017 – 2019</span>
+        </div>
+        <div class="border-l-2 border-accent pl-4">
+          <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Follow-up Winner photography competition: Wageningen in 2045</h4>
+          <p class="text-sm text-zinc-500 dark:text-zinc-400">Municipality of Wageningen</p>
+          <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full inline-block mt-1">2024</span>
+        </div>
+        <div class="border-l-2 border-accent pl-4">
+          <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Sports champion</h4>
+          <p class="text-sm text-zinc-500 dark:text-zinc-400">Three-fold champion in badminton, three-fold champion in tennis</p>
+          <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full inline-block mt-1">Multiple years</span>
         </div>
       </div>
+    </div>
+  </div>
+</div>
 
     </div>
   </div>
 </section>
+
+<!-- Other Work Experience Section -->
+<div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden"
+     x-data="{ open: false }"
+     @mouseenter="open = true"
+     @mouseleave="open = false">
+  <button @click="open = !open" class="w-full flex items-center justify-between p-5 text-left hover:bg-[#e6f0ea]/50 dark:hover:bg-zinc-800/30 transition-colors cursor-pointer">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-[#e6f0ea] dark:bg-zinc-800 rounded-lg flex items-center justify-center">
+        <svg class="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+        </svg>
+      </div>
+      <span class="font-display font-bold text-lg text-zinc-900 dark:text-white">Other Work Experience</span>
+      <span class="text-xs text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-2.5 py-0.5 rounded-full">5 entries</span>
+    </div>
+    <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+    </svg>
+  </button>
+  <div x-show="open" x-collapse>
+    <div class="px-5 pb-5 space-y-4">
+      <div class="border-l-2 border-accent pl-4">
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Sport Complex Manager</h4>
+          <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full whitespace-nowrap">2026</span>
+        </div>
+        <p class="text-sm text-accent font-medium">Sportservice De Vallei</p>
+        <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Responsible for maintenance, repairs, and safety across four sports complexes.</p>
+      </div>
+      <div class="border-l-2 border-accent pl-4">
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Car Mechanic</h4>
+          <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full whitespace-nowrap">2009 – 2017</span>
+        </div>
+        <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">8.5 years of hands-on experience in car repair and maintenance.</p>
+      </div>
+      <div class="border-l-2 border-accent pl-4">
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Student Consultant</h4>
+          <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full whitespace-nowrap">2016</span>
+        </div>
+        <p class="text-sm text-accent font-medium">Dutch Government: Ministry of Education, Culture, and Science</p>
+        <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Researched and consulted on improving Dutch student mobility to China.</p>
+      </div>
+      <div class="border-l-2 border-accent pl-4">
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Receptionist &amp; Night Guard</h4>
+          <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full whitespace-nowrap">2018</span>
+        </div>
+        <p class="text-sm text-accent font-medium">Wageningen International Congress Centre</p>
+        <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Hotel reception and security services.</p>
+      </div>
+      <div class="border-l-2 border-accent pl-4">
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Disability Care</h4>
+          <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full whitespace-nowrap">2025 – 2026</span>
+        </div>
+        <p class="text-sm text-accent font-medium">Zideris</p>
+        <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Providing (day)care and support services for individuals with mental and physical disabilities.</p>
+      </div>
+    </div>
+  </div>
+</div>
 
       <!-- ═══ EDUCATION ═══ -->
 <section class="py-12 bg-[#f5f9f6] dark:bg-[#121a15]">
