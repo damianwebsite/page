@@ -584,7 +584,7 @@
         next() { this.currentIndex = (this.currentIndex + 1) % this.images.length; },
         prev() { this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length; },
         autoPlay() {
-          setInterval(() => { this.next(); }, 5000);
+          setInterval(() => { this.next(); }, 8000);
         }
       }" x-init="autoPlay()">
         
