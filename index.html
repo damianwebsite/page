@@ -574,10 +574,10 @@
       <!-- Left: Interactive Photo Gallery -->
       <div class="reveal order-2 md:order-1" x-data="{
         images: [
+          'images/jump.webp',
           'images/photographing.jpg',
-          'images/profil2.webp',
-          'images/forest.jpg',
-          'images/lecture.jpg'
+          'images/football.webp',
+          'images/profil2.webp'
         ],
         currentIndex: 0,
         next() { this.currentIndex = (this.currentIndex + 1) % this.images.length; },
@@ -613,7 +613,7 @@
         </div>
         
         <!-- Optional: Image Caption -->
-        <p class="text-xs text-center text-zinc-500 dark:text-zinc-400 mt-2" x-text="['Photographing in the field', 'Portrait', 'Forest exploration', 'Giving a lecture'][currentIndex]"></p>
+        <p class="text-xs text-center text-zinc-500 dark:text-zinc-400 mt-2" x-text="['Self-portrait', 'Photographing in the field', 'Playing football abroad', 'Portrait'][currentIndex]"></p>
       </div>
 
       <!-- Right: Text (unchanged) -->
