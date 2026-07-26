@@ -188,18 +188,18 @@
       Plant Scientist • Photographer • Science Communicator • Creative Coder • Sports coach
     </p>
 
-    <!-- Profile Section (inline with stats) -->
-    <div class="reveal d2 bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700 flex flex-col md:flex-row items-start gap-6 mb-6">
+    <!-- Profile Row: Photo + Text + Timelapse (5 columns) -->
+    <div class="reveal d2 grid grid-cols-5 gap-6 mb-6">
       
-      <!-- Profile Photo -->
-      <div class="flex-shrink-0">
-        <div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-accent/30 shadow-lg">
+      <!-- Column 1: Profile Photo -->
+      <div class="col-span-1">
+        <div class="w-full aspect-square rounded-full overflow-hidden border-4 border-accent/30 shadow-lg">
           <img src="images/profil.webp" alt="Damian Boer" class="w-full h-full object-cover" loading="lazy">
         </div>
       </div>
       
-      <!-- Profile Text -->
-      <div class="flex-1">
+      <!-- Columns 2-4: Profile Text -->
+      <div class="col-span-3 bg-white dark:bg-[#1e2a23] rounded-2xl p-6 border border-zinc-100 dark:border-zinc-700">
         <h3 class="font-display font-bold text-2xl text-zinc-900 dark:text-white mb-2">About Me</h3>
         <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed mb-3">
           I am a plant scientist, photographer, creative communicator, and sports enthusiast with a passion for biodiversity. 
@@ -214,10 +214,17 @@
         </p>
         <p class="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed">One thing is certain; I'll gladly use my passionate energy!</p>
       </div>
-
+      
+      <!-- Column 5: Timelapse GIF -->
+      <div class="col-span-1 bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 flex items-center justify-center p-2">
+        <div class="w-full rounded-lg overflow-hidden">
+          <img src="images/TimelapseGif.gif" alt="Plant growth timelapse" class="w-full h-auto max-h-48 object-contain" loading="lazy"/>
+        </div>
+      </div>
+      
     </div>
 
-    <!-- Quick stats + Timelapse GIF (5 columns) -->
+    <!-- Quick stats -->
     <div class="reveal d2 grid grid-cols-2 md:grid-cols-5 gap-3">
       <div class="bg-white dark:bg-[#1e2a23] rounded-xl p-3 text-center border border-zinc-100 dark:border-zinc-700">
         <p class="font-display font-bold text-xl text-accent">7</p>
@@ -234,13 +241,6 @@
       <div class="bg-white dark:bg-[#1e2a23] rounded-xl p-3 text-center border border-zinc-100 dark:border-zinc-700">
         <p class="font-display font-bold text-xl text-accent">∞</p>
         <p class="text-[10px] text-zinc-500 dark:text-zinc-400">Passion for biodiversity &amp; creativity</p>
-      </div>
-      
-      <!-- NEW: Timelapse GIF as 5th column -->
-      <div class="bg-white dark:bg-[#1e2a23] rounded-xl overflow-hidden border border-zinc-100 dark:border-zinc-700 flex items-center justify-center p-1">
-        <div class="w-full rounded-lg overflow-hidden">
-          <img src="images/TimelapseGif.gif" alt="Plant growth timelapse" class="w-full h-auto max-h-20 object-contain" loading="lazy"/>
-        </div>
       </div>
     </div>
   </div>
