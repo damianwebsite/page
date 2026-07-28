@@ -105,22 +105,22 @@
 <header class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
   :class="scrolled?'bg-white/90 dark:bg-[#121a15]/90 backdrop-blur-md shadow-sm shadow-black/5':''">
   <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-    <a href="/page/" class="font-display font-bold text-xl tracking-tight z-10">
+    <a href="/" class="font-display font-bold text-xl tracking-tight z-10">
       <span class="text-zinc-900 dark:text-white">Damian </span><span class="text-accent">Boer</span>
     </a>
     <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
-      <li><a href="/page/portfolio.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors on !text-zinc-900 dark:!text-white">Portfolio</a></li>
-      <li><a href="/page/blog.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Blog</a></li>
-      <li><a href="/page/cv.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">CV</a></li>
-      <li><a href="/page/#about" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">About</a></li>
-      <li><a href="/page/#contact" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Contact</a></li>
+      <li><a href="/portfolio.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors on !text-zinc-900 dark:!text-white">Portfolio</a></li>
+      <li><a href="/blog.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Blog</a></li>
+      <li><a href="/cv.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">CV</a></li>
+      <li><a href="/#about" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">About</a></li>
+      <li><a href="/#contact" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Contact</a></li>
     </ul>
     <div class="flex items-center gap-3">
       <button @click="dark=!dark" class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
         <svg x-show="!dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
         <svg x-show="dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
       </button>
-      <a href="/page/#contact" class="hidden md:inline-flex items-center gap-2 shimmer bg-accent text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-accent-light transition-colors">
+      <a href="/#contact" class="hidden md:inline-flex items-center gap-2 shimmer bg-accent text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-accent-light transition-colors">
         Contact me <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
       </a>
       <button @click="mobileMenu=!mobileMenu" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700">
@@ -131,13 +131,13 @@
   </nav>
   <div x-show="mobileMenu" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="md:hidden bg-white dark:bg-[#121a15] border-t border-zinc-100 dark:border-zinc-800">
     <ul class="flex flex-col px-6 py-5 gap-4 text-sm font-medium">
-      <li><a href="/page/portfolio.html" @click="mobileMenu=false" class="block text-accent font-medium">Portfolio</a></li>
-      <li><a href="/page/blog.html" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Blog</a></li>
-      <li><a href="/page/cv.html" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">CV</a></li>
-      <li><a href="/page/#about" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">About</a></li>
-      <li><a href="/page/#contact" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Contact</a></li>
+      <li><a href="/portfolio.html" @click="mobileMenu=false" class="block text-accent font-medium">Portfolio</a></li>
+      <li><a href="/blog.html" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Blog</a></li>
+      <li><a href="/cv.html" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">CV</a></li>
+      <li><a href="/#about" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">About</a></li>
+      <li><a href="/#contact" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Contact</a></li>
       <li class="pt-2 border-t border-zinc-100 dark:border-zinc-800">
-        <a href="/page/#contact" @click="mobileMenu=false" class="inline-flex shimmer bg-accent text-white font-semibold text-sm px-5 py-2.5 rounded-full">Contact me →</a>
+        <a href="/#contact" @click="mobileMenu=false" class="inline-flex shimmer bg-accent text-white font-semibold text-sm px-5 py-2.5 rounded-full">Contact me →</a>
       </li>
     </ul>
   </div>
@@ -272,7 +272,7 @@
           <p class="text-xs font-semibold text-accent-light tracking-widest uppercase mb-4">Ready to collaborate?</p>
           <h2 class="font-display font-bold text-3xl md:text-4xl text-white mb-4">Want your project here?</h2>
           <p class="text-[#b0c8ba] max-w-md mx-auto mb-8">I'm open to research collaborations, visual storytelling projects, and creative missions. Let's bring your plant-powered ideas to life.</p>
-          <a href="/page/#contact" class="inline-flex items-center gap-2 shimmer bg-accent text-white font-semibold px-8 py-3.5 rounded-full hover:bg-accent-light transition-colors">Start a project →</a>
+          <a href="/#contact" class="inline-flex items-center gap-2 shimmer bg-accent text-white font-semibold px-8 py-3.5 rounded-full hover:bg-accent-light transition-colors">Start a project →</a>
         </div>
       </div>
     </div>
@@ -310,19 +310,19 @@
           categories: ['photography', 'scicomm'],
           year: '2023',
           desc: 'Documenting the beauty ánd discomfort of plant conservation.',
-          img: '/page/images/greenhouse/green9.webp',
+          img: '/images/greenhouse/green9.webp',
           fullContent: `
             <p><strong>Plant conservation</strong> is very necessary — although we fully depend on plants to make our planet liveable...</p>
             <p>Many plant species are endangered, and greenhouses are some of the only places in which some species reside.</p>
             <p>With this photographic series, I wanted to show both the beautiful collaboration between conservation landscape, and at the same time almost suffocating spacial restriction that is placed on plants that require protection.</p>
           `,
           gallery: [
-            '/page/images/greenhouse/green8.webp',
-            '/page/images/greenhouse/green3.webp',
-            '/page/images/greenhouse/green4.webp',
-            '/page/images/greenhouse/green5.webp',
-            '/page/images/greenhouse/green6.webp',
-            '/page/images/greenhouse/green7.webp',
+            '/images/greenhouse/green8.webp',
+            '/images/greenhouse/green3.webp',
+            '/images/greenhouse/green4.webp',
+            '/images/greenhouse/green5.webp',
+            '/images/greenhouse/green6.webp',
+            '/images/greenhouse/green7.webp',
           ],
         },
         {
@@ -331,7 +331,7 @@
           categories: ['creative', 'scicomm'],
           year: '2024',
           desc: 'An interactive generative art project where visitors generate their own virus-like particles.',
-          img: '/page/images/viral.JPG',
+          img: '/images/viral.JPG',
           fullContent: `
             <p><strong>Art-Like Particle</strong> is an interactive generative art project coded in p5.js that invites visitors to explore the beauty of viruses.</p>
             <p>Participants can generate their own virus-like particles in real-time, learning about viral structure and diversity through play. The project was exhibited at a Science x Art exposition in Wageningen.</p>
@@ -353,16 +353,16 @@
           categories: ['photography', 'scicomm'],
           year: '2019',
           desc: 'Documenting an ant collection mission',
-          img: '/page/images/expedition/expedition.webp',
+          img: '/images/expedition/expedition.webp',
           fullContent: `
             <p><strong>Expedition missions</strong> are incredibly fun to partake in; getting to truly explore and understand local biodiversity is one of my favourite activities.</p>
             <p>Whilst being in Okinawa, a fellow researcher invited me to tag along to find rare endemic (rotting) wood-inhabiting ant species.</p>
             <p>We indeed ended up finding difficult-to-find species (Cryptopone) which he would later dissect and study. Going through rotting wood in the jungle of Okinawa was definitely not something I anticipated on when coming there to study Plant Epigenetics, but it was certainly one of my more memorable experiences to record.</p>
           `,
           gallery: [
-            '/page/images/expedition/expedition2.webp',
-            '/page/images/expedition/expedition3.webp',
-            '/page/images/expedition/expedition4.webp',
+            '/images/expedition/expedition2.webp',
+            '/images/expedition/expedition3.webp',
+            '/images/expedition/expedition4.webp',
           ],
         },
         {
@@ -371,7 +371,7 @@
           categories: ['scicomm'],
           year: '2018-2024',
           desc: 'Non-profit for science communication about genetic editing in agriculture.',
-          img: '/page/images/genesproutlogodark.png',
+          img: '/images/genesproutlogodark.png',
           fullContent: `
             <p><strong>GeneSprout Initiative</strong> is an international non-profit organization I founded to make genetic editing a more accessible topic.</p>
             <p>We've reached <strong>thousands of people</strong> across the world, teaching about genetic editing (New Breeding Techniques) through hands-on activities and dialogue sessions.</p>
@@ -386,7 +386,7 @@
             </ul>
             <p>Ultimately I left the organization as the board was — in my opinion — more focused on lobbying as compared to creating an environment for open dialogue.</p>
           `,
-          largeImage: '/page/images/lecture.jpg',
+          largeImage: '/images/lecture.jpg',
           largeImageTitle: 'GeneSprout in action',
           largeImageCaption: 'Teaching and hosting a dialogue session for GeneSprout; approximately 70 students of Wageningen University were in attendance',
           links: [
@@ -399,15 +399,15 @@
           categories: ['photography'],
           year: '2025',
           desc: 'A photographic exploration contrasting the landscapes of Antarctica and Okinawa.',
-          img: '/page/images/photography/oist_3.webp',
+          img: '/images/photography/oist_3.webp',
           fullContent: `
             <p><strong>Polar Blues, Island Hues</strong> was an exhibition at the OIST Tunnel Gallery in Okinawa, Japan (April 2025).</p>
             <p>The exhibition presented images of Antarctica and Okinawa, offering a visual journey through their contrasting landscapes to witness firsthand the profound effects of climate change.</p>
             <p>My contribution featured photography of Okinawa's botanically rich landscape.</p>
           `,
           gallery: [
-            '/page/images/photography/oist_exhib.jpg',
-            '/page/images/photography/OIST_exhibition.webp',
+            '/images/photography/oist_exhib.jpg',
+            '/images/photography/OIST_exhibition.webp',
           ],
           links: [
             { label: 'Exhibition Page →', url: 'https://groups.oist.jp/culture/event/polar-blues-island-hues-contrasting-colors-okinawa-and-antarctica' }
@@ -419,13 +419,13 @@
           categories: ['scicomm'],
           year: '2026 - present',
           desc: 'Writing a book presenting plant science to children through commonly found plants.',
-          img: '/page/images/vlieg2.JPG',
+          img: '/images/vlieg2.JPG',
           fullContent: `
             <p><strong>Writing a book for children</strong> to make plants exciting through plant science.</p>
             <p>Currently in development stage; I am learning how to illustrate digitally, and how to publish eBooks.</p>
           `,
           gallery: [
-            '/page/images/vlieg.JPG',
+            '/images/vlieg.JPG',
           ],
         },
         {
@@ -434,15 +434,15 @@
           categories: ['photography'],
           year: '2024',
           desc: 'Photography for the municipality of Wageningen to conceptualize the municipality in 2045.',
-          img: '/page/images/photography/double2.webp',
+          img: '/images/photography/double2.webp',
           fullContent: `
             <p><strong>Experimental photography</strong> for the municipality of Wageningen to visualize one of the aspects of the municipality in the future: in 2045.</p>
             <p>I used double exposure photography to overlap a student dorm with greenery to indicate the balance of enough living spaces and nature.</p>
             <p>The submission was used in the report for future plans, and was awarded second prize for best photograph.</p>
           `,
           gallery: [
-            '/page/images/photography/municip.jpg',
-            '/page/images/photography/double2.webp',
+            '/images/photography/municip.jpg',
+            '/images/photography/double2.webp',
           ],
         },
         {
@@ -451,7 +451,7 @@
           categories: ['photography', 'scicomm'],
           year: '2023',
           desc: 'Helios — photography of heliotropism.',
-          img: '/page/images/photography/helios.webp',
+          img: '/images/photography/helios.webp',
           fullContent: `
             <p><strong>Helios</strong> is a fine art print conceptualizing heliotropic (following the sun) movement.</p>
             <p>Plants were photographed whilst moving using a slow shutter with a flash, more commonly used in street photography.</p>
@@ -469,7 +469,7 @@
           categories: ['creative'],
           year: '2023',
           desc: 'Procedurally generated animation in p5js. Live on the website!',
-          img: '/page/images/moon.JPG',
+          img: '/images/moon.JPG',
           fullContent: `
             <p><strong>Learning p5js</strong> is something I really enjoy.</p>
             <p>This frame generates new 'stars' as the moon phases cycle through — it was one of my first animations I made using code only.</p>
@@ -486,7 +486,7 @@
           categories: ['creative'],
           year: '2022 - present',
           desc: 'Small projects to challenge programming skills.',
-          img: '/page/images/coding/treerings.JPG',
+          img: '/images/coding/treerings.JPG',
           fullContent: `
             <p><strong>Creative coding</strong> is something I started picking up from 2022 onwards. I have never been a programming genius, but with ample materials available online (namely YouTube videos), learning about generative art and creative coding sparked something in me.</p>
             <p>Creative coding and generative art is all about <strong>creating systems that in turn... create.</strong></p>
@@ -495,11 +495,11 @@
             <p>These projects were based on landscapes in Iceland, shapes in a modern museum, scenes outside on a parking lot, tree rings in the forest, and metro maps in big cities. Of course the gallery below shows only one output, but behind each output shown here there is a system behind these that can actually create different outputs altogether!</p>
           `,
           gallery: [
-            '/page/images/coding/domki3.JPG',
-            '/page/images/coding/krixi.JPG',
-            '/page/images/coding/lightpost.JPG',
-            '/page/images/coding/treerings2.JPG',
-            '/page/images/coding/metro2.JPG'
+            '/images/coding/domki3.JPG',
+            '/images/coding/krixi.JPG',
+            '/images/coding/lightpost.JPG',
+            '/images/coding/treerings2.JPG',
+            '/images/coding/metro2.JPG'
           ],
         },
       ],
