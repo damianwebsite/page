@@ -81,6 +81,35 @@
     .project-card{transition:transform .28s cubic-bezier(.4,0,.2,1),border-color .18s;cursor:pointer;}
     .project-card:hover{transform:translateY(-4px);border-color:#2D6A4F;}
 
+        /* Protect images from right-click save */
+    .photo-frame img,
+    .modal-content img {
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    /* Optional watermark */
+    .photo-frame {
+      position: relative;
+    }
+    .photo-frame::after {
+      content: '© Damian Boer';
+      position: absolute;
+      bottom: 8px;
+      right: 12px;
+      font-size: 10px;
+      color: rgba(255,255,255,0.25);
+      pointer-events: none;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.5px;
+      z-index: 1;
+    }
+    .dark .photo-frame::after {
+      color: rgba(255,255,255,0.15);
+    }
+
     .tag-accent{background-color:#e6f0ea;color:#2D6A4F;border-color:#95b8a7;}
     .dark .tag-accent{background-color:#1e2a23;color:#409F7A;border-color:#2a3a30;}
     .tag-neutral{background-color:#e4e7e5;color:#4a5a52;border-color:#c8d0ca;}
@@ -572,30 +601,46 @@
         document.body.style.overflow = '';
       },
 
-      init() {
-        this.dark = localStorage.getItem('theme') === 'dark'
-          || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+init() {
+  this.dark = localStorage.getItem('theme') === 'dark'
+    || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-        window.addEventListener('scroll', () => {
-          this.scrolled = window.scrollY > 20;
-        }, { passive: true });
+  window.addEventListener('scroll', () => {
+    this.scrolled = window.scrollY > 20;
+  }, { passive: true });
 
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape') this.closeProject();
-        });
+  // Disable right-click on all images
+  document.addEventListener('contextmenu', function(e) {
+    if (e.target.tagName === 'IMG') {
+      e.preventDefault();
+      return false;
+    }
+  });
 
-        this.$nextTick(() => {
-          const obs = new IntersectionObserver(entries => {
-            entries.forEach(e => {
-              if (e.isIntersecting) {
-                e.target.classList.add('visible');
-                obs.unobserve(e.target);
-              }
-            });
-          }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
-          document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-        });
-      }
+  // Disable drag on images
+  document.addEventListener('dragstart', function(e) {
+    if (e.target.tagName === 'IMG') {
+      e.preventDefault();
+      return false;
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') this.closeProject();
+  });
+
+  this.$nextTick(() => {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  });
+}
     }
   }
 
