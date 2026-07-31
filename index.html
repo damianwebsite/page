@@ -734,23 +734,22 @@ function app() {
       document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
       document.getElementById('yr').textContent = new Date().getFullYear();
+
+      // ✅ RIGHT: Image protection inside init()
+      document.addEventListener('contextmenu', function(e) {
+        if (e.target.tagName === 'IMG') {
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      document.addEventListener('dragstart', function(e) {
+        if (e.target.tagName === 'IMG') {
+          e.preventDefault();
+          return false;
+        }
+      });
     },
-
-    // Disable right-click on all images
-document.addEventListener('contextmenu', function(e) {
-  if (e.target.tagName === 'IMG') {
-    e.preventDefault();
-    return false;
-  }
-});
-
-// Disable drag on images
-document.addEventListener('dragstart', function(e) {
-  if (e.target.tagName === 'IMG') {
-    e.preventDefault();
-    return false;
-  }
-});
 
     updateSection() {
       const atBottom = (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 60;
