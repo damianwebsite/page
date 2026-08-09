@@ -260,13 +260,17 @@
             <p class="text-xs text-zinc-400 dark:text-zinc-500 mt-2 text-center" x-show="selectedProject.largeImageCaption" x-text="selectedProject.largeImageCaption"></p>
           </div>
 
-          <!-- Iframe embed -->
-          <div x-show="selectedProject.embedUrl" class="mt-6">
-            <h4 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-3">Interactive Demo</h4>
-            <div class="iframe-container rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-700">
-              <iframe :src="selectedProject.embedUrl" allowfullscreen loading="lazy"></iframe>
-            </div>
-          </div>
+<!-- Iframe embed -->
+<div x-show="selectedProject.embedUrl" class="mt-6">
+  <h4 class="font-display font-bold text-lg text-zinc-900 dark:text-white mb-3">Interactive Demo</h4>
+  <div class="rounded-xl overflow-hidden border border-zinc-200 dark:border-zinc-700" 
+       :style="'position:relative;width:100%;height:' + (selectedProject.embedHeight || '400px') + ';min-height:300px;'">
+    <iframe :src="selectedProject.embedUrl" 
+            allowfullscreen 
+            loading="lazy"
+            style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;"></iframe>
+  </div>
+</div>
 
           <!-- Gallery -->
           <div x-show="selectedProject.gallery && selectedProject.gallery.length > 0 && !selectedProject.largeImage" class="mt-6">
@@ -557,6 +561,7 @@
             <p>By using unconventional lenses, and by implementing modern techniques I'm frequently trying to photograph plants from a unique perspective. </p>
             <p>Bringing new dynamics through camera movement, adding depth by using multiple shutters, or by viewing plants in alternative lights, perspectives, and/or lenses... they are all part of trying to get others (and myself) to view plants differently :)</p>
           `,
+          embedHeight: '400px',  // ← Add this field
           gallery: [
             '/images/exp/flash.webp',
             '/images/exp/icm.webp',
