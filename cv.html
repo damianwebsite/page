@@ -253,120 +253,106 @@
     </div>
   </div>
 </section>
-<!-- ═══ CATEGORY ACCORDION SECTIONS (Hover + Click) ═══ -->
-<section class="py-6">
-  <div class="max-w-5xl mx-auto px-6">
-    <!-- Experience Title -->
-    <div class="mb-6">
-      <p class="reveal text-xs font-semibold text-accent dark:text-accent-light tracking-widest uppercase mb-2">Professional Journey</p>
-      <h2 class="reveal d1 font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white">Experience</h2>
-      <p class="reveal d2 text-zinc-500 dark:text-zinc-400 mt-1">A diverse career spanning research, communication, arts, and education</p>
+<!-- Research Section -->
+<div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden" 
+     x-data="{ open: false }">
+  <button @click="open = !open" class="w-full flex items-center justify-between p-5 text-left hover:bg-[#e6f0ea]/50 dark:hover:bg-zinc-800/30 transition-colors cursor-pointer">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-[#e6f0ea] dark:bg-zinc-800 rounded-lg flex items-center justify-center">
+        <svg class="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+        </svg>
+      </div>
+      <span class="font-display font-bold text-lg text-zinc-900 dark:text-white">Research</span>
+      <span class="text-xs text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-2.5 py-0.5 rounded-full">6 entries</span>
     </div>
-
-    <div class="reveal space-y-3">
-      
-      <!-- Research Section -->
-      <div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden" 
-           x-data="{ open: false }" 
-        <button @click="open = !open" class="w-full flex items-center justify-between p-5 text-left hover:bg-[#e6f0ea]/50 dark:hover:bg-zinc-800/30 transition-colors cursor-pointer">
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-[#e6f0ea] dark:bg-zinc-800 rounded-lg flex items-center justify-center">
-              <svg class="w-4 h-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
-              </svg>
-            </div>
-            <span class="font-display font-bold text-lg text-zinc-900 dark:text-white">Research</span>
-            <span class="text-xs text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-2.5 py-0.5 rounded-full">6 entries</span>
-          </div>
-          <svg class="w-5 h-5 text-zinc-400 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-          </svg>
-        </button>
-        <div x-show="open" x-collapse>
-          <div class="px-5 pb-5 space-y-4">
-            <!-- PhD -->
-            <div class="border-l-2 border-accent pl-4">
-              <div class="flex flex-wrap items-start justify-between gap-2">
-                <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">PhD Plant Physiology</h4>
-                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full whitespace-nowrap">Sep 2019 – Mar 2025</span>
-              </div>
-              <p class="text-sm text-accent font-medium">Wageningen University &amp; Research · Full-time</p>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400">Wageningen, Netherlands</p>
-              <ul class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed space-y-1 list-disc list-inside mt-1">
-                <li>Development and growth of True Potato Seed (TPS)-derived seedlings</li>
-                <li>Variation in response of the first generation of hybrid TPS to saline environments</li>
-                <li>Physiological and molecular mechanisms underlying contrast in salinity response</li>
-              </ul>
-            </div>
-            <!-- Grant -->
-            <div class="border-l-4 border-accent pl-4 bg-[#e6f0ea]/30 dark:bg-zinc-800/30 rounded-r-lg py-2 pr-3">
-              <div class="flex flex-wrap items-start justify-between gap-2">
-                <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Proposal Writer — €572.000 Grant</h4>
-                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full whitespace-nowrap">2018</span>
-              </div>
-              <p class="text-sm text-accent font-medium">Wageningen University &amp; Research</p>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Wrote a research proposal about the (epi)genetics of mushrooms. Supervisor received a €572.000 grant.</p>
-              <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1"><span class="font-medium text-accent">Grant:</span> TU18151 — Strain instability in fungi (2019–)</p>
-            </div>
-            <!-- OIST -->
-            <div class="border-l-2 border-accent pl-4">
-              <div class="flex flex-wrap items-start justify-between gap-2">
-                <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Plant Epigenetics Research Intern</h4>
-                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full whitespace-nowrap">Mar 2019 – Aug 2019</span>
-              </div>
-              <p class="text-sm text-accent font-medium">Okinawa Institute of Science and Technology (OIST)</p>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400">Okinawa, Japan</p>
-              <ul class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed space-y-1 list-disc list-inside mt-1">
-                <li>Studied epigenetic regulation of intragenic transposable elements within Arabidopsis thaliana</li>
-                <li>Working for Hidetoshi Saze, Head of Plant Epigenetics at OIST</li>
-                <li>Findings resulted in a paper in <em>Nature Communications</em> (2020)</li>
-              </ul>
-            </div>
-            <!-- Pharos -->
-            <div class="border-l-2 border-accent pl-4">
-              <div class="flex flex-wrap items-start justify-between gap-2">
-                <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Researcher</h4>
-                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full whitespace-nowrap">Oct 2025 – Dec 2025</span>
-              </div>
-              <p class="text-sm text-accent font-medium">Pharos · Part-time · Hybrid</p>
-              <ul class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed space-y-1 list-disc list-inside mt-1">
-                <li>Researching access to health care for refugees and those with a migration background in the Netherlands</li>
-                <li>Provided translations and editorial work for flyers for Polish workers</li>
-              </ul>
-            </div>
-            <!-- MSc Thesis -->
-            <div class="border-l-2 border-accent pl-4">
-              <div class="flex flex-wrap items-start justify-between gap-2">
-                <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">MSc Thesis</h4>
-                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full whitespace-nowrap">Jul 2017 – Jun 2018</span>
-              </div>
-              <p class="text-sm text-accent font-medium">Wageningen University &amp; Research</p>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400">Topic: The role of BrARF3.1 in leaf growth of Brassica rapa</p>
-              <div class="flex flex-wrap items-center gap-2 mt-1">
-                <span class="text-xs font-semibold text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-2.5 py-0.5 rounded-full">Grade: 9.0</span>
-              </div>
-              <ul class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed space-y-1 list-disc list-inside mt-1">
-                <li>Cloning (E.coli, Yeast, Agrobacterium) — primer design, isolations, sequencing</li>
-                <li>Yeast-2-Hybrid assays • Overexpression lines • Phenotyping</li>
-              </ul>
-            </div>
-            <!-- BSc Thesis -->
-            <div class="border-l-2 border-accent pl-4">
-              <div class="flex flex-wrap items-start justify-between gap-2">
-                <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">BSc Thesis</h4>
-                <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full whitespace-nowrap">2016</span>
-              </div>
-              <p class="text-sm text-accent font-medium">Department of Virology, Wageningen University</p>
-              <p class="text-sm text-zinc-500 dark:text-zinc-400">Topic: Localization of N-proteins of the Bunyaviridae relative to processing bodies and stress-granules</p>
-              <div class="flex flex-wrap items-center gap-2 mt-1">
-                <span class="text-xs font-semibold text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-2.5 py-0.5 rounded-full">Grade: 8.5</span>
-              </div>
-            </div>
-
-          </div>
+    <svg class="w-5 h-5 text-zinc-400 transition-transform shrink-0" :class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+    </svg>
+  </button>
+  <div x-show="open" x-collapse>
+    <div class="px-5 pb-5 space-y-4">
+      <!-- PhD -->
+      <div class="border-l-2 border-accent pl-4">
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">PhD Plant Physiology</h4>
+          <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full whitespace-nowrap">Sep 2019 – Mar 2025</span>
+        </div>
+        <p class="text-sm text-accent font-medium">Wageningen University &amp; Research · Full-time</p>
+        <p class="text-sm text-zinc-500 dark:text-zinc-400">Wageningen, Netherlands</p>
+        <ul class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed space-y-1 list-disc list-inside mt-1">
+          <li>Development and growth of True Potato Seed (TPS)-derived seedlings</li>
+          <li>Variation in response of the first generation of hybrid TPS to saline environments</li>
+          <li>Physiological and molecular mechanisms underlying contrast in salinity response</li>
+        </ul>
+      </div>
+      <!-- Grant -->
+      <div class="border-l-4 border-accent pl-4 bg-[#e6f0ea]/30 dark:bg-zinc-800/30 rounded-r-lg py-2 pr-3">
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Proposal Writer — €572.000 Grant</h4>
+          <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full whitespace-nowrap">2018</span>
+        </div>
+        <p class="text-sm text-accent font-medium">Wageningen University &amp; Research</p>
+        <p class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Wrote a research proposal about the (epi)genetics of mushrooms. Supervisor received a €572.000 grant.</p>
+        <p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1"><span class="font-medium text-accent">Grant:</span> TU18151 — Strain instability in fungi (2019–)</p>
+      </div>
+      <!-- OIST -->
+      <div class="border-l-2 border-accent pl-4">
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Plant Epigenetics Research Intern</h4>
+          <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full whitespace-nowrap">Mar 2019 – Aug 2019</span>
+        </div>
+        <p class="text-sm text-accent font-medium">Okinawa Institute of Science and Technology (OIST)</p>
+        <p class="text-sm text-zinc-500 dark:text-zinc-400">Okinawa, Japan</p>
+        <ul class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed space-y-1 list-disc list-inside mt-1">
+          <li>Studied epigenetic regulation of intragenic transposable elements within Arabidopsis thaliana</li>
+          <li>Working for Hidetoshi Saze, Head of Plant Epigenetics at OIST</li>
+          <li>Findings resulted in a paper in <em>Nature Communications</em> (2020)</li>
+        </ul>
+      </div>
+      <!-- Pharos -->
+      <div class="border-l-2 border-accent pl-4">
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">Researcher</h4>
+          <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full whitespace-nowrap">Oct 2025 – Dec 2025</span>
+        </div>
+        <p class="text-sm text-accent font-medium">Pharos · Part-time · Hybrid</p>
+        <ul class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed space-y-1 list-disc list-inside mt-1">
+          <li>Researching access to health care for refugees and those with a migration background in the Netherlands</li>
+          <li>Provided translations and editorial work for flyers for Polish workers</li>
+        </ul>
+      </div>
+      <!-- MSc Thesis -->
+      <div class="border-l-2 border-accent pl-4">
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">MSc Thesis</h4>
+          <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full whitespace-nowrap">Jul 2017 – Jun 2018</span>
+        </div>
+        <p class="text-sm text-accent font-medium">Wageningen University &amp; Research</p>
+        <p class="text-sm text-zinc-500 dark:text-zinc-400">Topic: The role of BrARF3.1 in leaf growth of Brassica rapa</p>
+        <div class="flex flex-wrap items-center gap-2 mt-1">
+          <span class="text-xs font-semibold text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-2.5 py-0.5 rounded-full">Grade: 9.0</span>
+        </div>
+        <ul class="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed space-y-1 list-disc list-inside mt-1">
+          <li>Cloning (E.coli, Yeast, Agrobacterium) — primer design, isolations, sequencing</li>
+          <li>Yeast-2-Hybrid assays • Overexpression lines • Phenotyping</li>
+        </ul>
+      </div>
+      <!-- BSc Thesis -->
+      <div class="border-l-2 border-accent pl-4">
+        <div class="flex flex-wrap items-start justify-between gap-2">
+          <h4 class="font-display font-bold text-base text-zinc-900 dark:text-white">BSc Thesis</h4>
+          <span class="text-xs font-medium text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-3 py-1 rounded-full whitespace-nowrap">2016</span>
+        </div>
+        <p class="text-sm text-accent font-medium">Department of Virology, Wageningen University</p>
+        <p class="text-sm text-zinc-500 dark:text-zinc-400">Topic: Localization of N-proteins of the Bunyaviridae relative to processing bodies and stress-granules</p>
+        <div class="flex flex-wrap items-center gap-2 mt-1">
+          <span class="text-xs font-semibold text-accent bg-[#e6f0ea] dark:bg-zinc-800 px-2.5 py-0.5 rounded-full">Grade: 8.5</span>
         </div>
       </div>
-
+    </div>
+  </div>
+</div>
       <!-- Science Communication Section -->
       <div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden"
            x-data="{ open: false }"
