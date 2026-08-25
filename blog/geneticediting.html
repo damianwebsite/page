@@ -90,7 +90,41 @@
     .dark .tag-accent{background-color:#1e2a23;color:#409F7A;border-color:#2a3a30;}
     .tag-neutral{background-color:#e4e7e5;color:#4a5a52;border-color:#c8d0ca;}
     .dark .tag-neutral{background-color:#2a3a30;color:#a0b8aa;border-color:#3a4a40;}
+/* Stronger chapter-style headings */
+.prose-article h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 2.5rem 0 0.8rem;
+  line-height: 1.25;
+  color: #1e2a23;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #2D6A4F;
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+  border-bottom-color: rgba(45, 106, 79, 0.25);
+  display: inline-block;
+}
+.dark .prose-article h2 {
+  color: #e6f0ea;
+  border-bottom-color: rgba(64, 159, 122, 0.3);
+}
 
+/* Subheadings (h3) with chapter style */
+.prose-article h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1.8rem 0 0.6rem;
+  line-height: 1.3;
+  color: #2D6A4F;
+  padding-left: 0.75rem;
+  border-left: 3px solid #2D6A4F;
+}
+.dark .prose-article h3 {
+  color: #409F7A;
+  border-left-color: #409F7A;
+}
     .prose-article h2{font-family:'Space Grotesk',sans-serif;font-size:1.55rem;font-weight:700;margin:2rem 0 1rem;line-height:1.25;color:#1e2a23;}
     .dark .prose-article h2{color:#e6f0ea;}
     .prose-article h3{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:600;margin:1.5rem 0 .6rem;line-height:1.3;color:#2D6A4F;}
@@ -188,20 +222,44 @@
           </div>
 
           <!-- Title -->
-          <h1 class="font-display font-bold text-3xl md:text-4xl text-zinc-900 dark:text-white mb-6">Beyond the "pro or against": what do we want to use Genetic Editing for?</h1>
+          <h1 class="font-display font-bold text-3xl md:text-4xl text-zinc-900 dark:text-white mb-6">Beyond the 'pro or against': what do we want to use Genetic Editing for?</h1>
 
           <!-- Content -->
           <div class="prose-article">
 
-            <p><strong>Background:</strong></p>
             <p>The Caucasus, my summer holiday, 2018. I still remember it well.</p>
             <p>The end of my Masters in Plant Biotechnology was in sight. At my university, many of my fellow students were applying genetic editing techniques in crops or model species to study the functions of genes. For many of us, it was part of becoming a plant scientist or breeder.</p>
             <p>However, in Europe, something quite different was happening: the Court of Justice of the European Union (CJEU) was deciding on a question that would have big consequences for the technologies we were learning to use: <em>"Should plants produced using newer mutagenesis techniques, including the emerging new targeted genetic-editing techniques, fall under the EU's existing GMO legislation from 2001?"</em></p>
 
-            <p><strong>Background: Genetic Modification and Genetic Editing: what is the difference?</strong></p>
-            <p>Both conventional Genetic Modification (GM) and New Genomic Techniques (NGTs) can be used to alter an organism's genome. However, NGTs comprise newer techniques that can enable targeted changes to DNA, and in some applications, allow genetic changes to be made without introducing foreign DNA or genetic sequences outside the species conventional breeding gene pool.*</p>
-            <p><em>*The conventional breeding gene pool means the genetic variation that breeders can access by crossing sexually compatible plants. An example from humans would be eye colour: the genetic variation in eye colour genes contributes to our differences in eye colour, that is a part of our gene pool!</em></p>
-
+<!-- Background Box -->
+<div class="bg-[#e6f0ea] dark:bg-[#1a261f] rounded-2xl p-6 my-6 border border-[#95b8a7] dark:border-[#2a3a30]">
+  <h3 class="font-display font-bold text-lg text-accent dark:text-accent-light mb-3 flex items-center gap-2">
+    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+    </svg>
+    Background
+  </h3>
+  <p class="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed mb-3">
+    <strong>Genetic Modification vs Genetic Editing — what is the difference?</strong>
+  </p>
+  <p class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+    Both conventional Genetic Modification (GM) and New Genomic Techniques (NGTs) can be used to alter an organism's genome. However, NGTs comprise newer techniques that can enable targeted changes to DNA, and in some applications, allow genetic changes to be made without introducing foreign DNA or genetic sequences outside the species' conventional breeding gene pool.
+    <span class="text-accent font-semibold cursor-pointer hover:text-accent-light transition-colors ml-1" 
+          @click="footnotes.genePool = !footnotes.genePool"
+          x-text="footnotes.genePool ? ' ✕' : ' *'">
+    </span>
+  </p>
+  
+  <!-- Expandable footnote inside the box -->
+  <div x-show="footnotes.genePool" x-collapse>
+    <div class="bg-white/50 dark:bg-black/20 rounded-lg p-3 mt-3 border-l-4 border-accent">
+      <p class="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed m-0">
+        <strong>Footnote:</strong> The conventional breeding gene pool means the genetic variation that breeders can access by crossing sexually compatible plants. An example from humans would be eye colour: the genetic variation in eye colour genes contributes to our differences in eye colour, that is a part of our gene pool!
+      </p>
+    </div>
+  </div>
+</div>
+            
             <p>Many students and scientists alike experienced the possibilities of the new techniques. They were increasingly accessible, and allowed to target specific regions of the genome to investigate what individual genes do, and how such changes affect plant functioning; its mechanisms and traits. Based on the rapid developments in the technologies, I found it difficult to believe that they could be fitted into legislation from 2001, in which the techniques did not exist yet.</p>
             <p>Nevertheless, in July 2018, the Court ruled that organisms produced through newer mutagenesis techniques fell within the scope of the existing GMO Directive. The ruling triggered strong reactions. Many scientific organisations criticised the decision, bringing forth arguments about the lack of scientific basis, and that the process of making a plant doesn't reflect the plant itself. Others defended the ruling, saying that newer techniques should be strongly regulated.</p>
 
