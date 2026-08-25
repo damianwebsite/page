@@ -2,7 +2,8 @@
 <html lang="en" x-data="{
   dark: localStorage.getItem('theme')==='dark'||(!localStorage.getItem('theme')&&window.matchMedia('(prefers-color-scheme: dark)').matches),
   scrolled: false,
-  mobileMenu: false
+  mobileMenu: false,
+  footnotes: { genePool: false }
 }" :class="{'dark':dark}" x-init="
   $watch('dark', v => localStorage.setItem('theme', v ? 'dark' : 'light'));
   window.addEventListener('scroll', () => { scrolled = window.scrollY > 20; }, { passive: true });
@@ -222,7 +223,7 @@
           </div>
 
           <!-- Title -->
-          <h1 class="font-display font-bold text-3xl md:text-4xl text-zinc-900 dark:text-white mb-6">Beyond the 'pro or against': what do we want to use Genetic Editing for?</h1>
+          <h1 class="font-display font-bold text-3xl md:text-4xl text-zinc-900 dark:text-white mb-6">Beyond the <em>pro</em> or <em>against</em>: what do we want to use Genetic Editing for?</h1>
 
           <!-- Content -->
           <div class="prose-article">
