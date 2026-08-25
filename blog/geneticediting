@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" x-data="{
+  dark: localStorage.getItem('theme')==='dark'||(!localStorage.getItem('theme')&&window.matchMedia('(prefers-color-scheme: dark)').matches),
+  scrolled: false,
+  mobileMenu: false
+}" :class="{'dark':dark}" x-init="
+  $watch('dark', v => localStorage.setItem('theme', v ? 'dark' : 'light'));
+  window.addEventListener('scroll', () => { scrolled = window.scrollY > 20; }, { passive: true });
+" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Beyond the 'pro or against': what do we want to use Genetic Editing for? — Damian Boer blog">
+  <meta property="og:title" content="Beyond the 'pro or against' — Damian Boer">
+  <meta property="og:description" content="What do we want to use Genetic Editing for? A reflection on the EU's new regulatory framework and the future of agriculture.">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://damianwebsite.github.io/blog/genetic-editing.html">
+  <!-- <meta property="og:image" content="https://damianwebsite.github.io/images/your-image.jpg"> -->
+  <title>Beyond the 'pro or against' — Damian Boer</title>
+
+  <!-- Tailwind + Alpine -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Space Grotesk', 'sans-serif'],
+            body: ['Inter', 'sans-serif']
+          },
+          colors: {
+            accent: '#2D6A4F',
+            'accent-light': '#409F7A',
+            'accent-muted': '#95B8A7',
+            'forest-dark': '#1B3B2F',
+            'forest-light': '#E6F0EA',
+            'moss': '#7A9E7E'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    *,*::before,*::after{box-sizing:border-box;}
+    html,body{font-family:'Inter',sans-serif;background-color:#f5f9f6;transition:background-color .3s,color .3s;}
+    h1,h2,h3,h4,h5,h6{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:-0.02em;}
+
+    .dark body{background-color:#121a15;}
+    .dark .bg-white{background-color:#1e2a23;}
+    .dark .bg-zinc-50{background-color:#1a261f;}
+    .dark .border-zinc-100{border-color:#2a3a30;}
+    .dark .border-zinc-200{border-color:#2a3a30;}
+    .dark .text-zinc-500{color:#a0b8aa;}
+    .dark .text-zinc-400{color:#8aa898;}
+    .dark .bg-zinc-100{background-color:#2a3a30;}
+
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:0.12;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.08'/%3E%3C/svg%3E");}
+
+    ::-webkit-scrollbar{width:10px;}
+    ::-webkit-scrollbar-track{background:transparent;}
+    ::-webkit-scrollbar-thumb{background:#2D6A4F;border-radius:99px;}
+    ::-webkit-scrollbar-thumb:hover{background:#409F7A;}
+    .dark ::-webkit-scrollbar-thumb{background:#409F7A;}
+    .dark ::-webkit-scrollbar-thumb:hover{background:#52B388;}
+    *{scrollbar-width:thin;scrollbar-color:#2D6A4F transparent;}
+    .dark *{scrollbar-color:#409F7A transparent;}
+
+    .nl{position:relative;}
+    .nl::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:currentColor;transition:width .22s cubic-bezier(.4,0,.2,1);}
+    .nl:hover::after,.nl.on::after{width:100%;}
+    .nl.on{font-weight:600;}
+
+    .shimmer{position:relative;overflow:hidden;}
+    .shimmer::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:rgba(255,255,255,.18);transform:skewX(-20deg);transition:left .4s cubic-bezier(.4,0,.2,1);}
+    .shimmer:hover::after{left:160%;}
+
+    .photo-frame{position:relative;overflow:hidden;background:#d4d8d0;}
+    .photo-frame img{width:100%;height:100%;object-fit:cover;display:block;}
+
+    .tag-accent{background-color:#e6f0ea;color:#2D6A4F;border-color:#95b8a7;}
+    .dark .tag-accent{background-color:#1e2a23;color:#409F7A;border-color:#2a3a30;}
+    .tag-neutral{background-color:#e4e7e5;color:#4a5a52;border-color:#c8d0ca;}
+    .dark .tag-neutral{background-color:#2a3a30;color:#a0b8aa;border-color:#3a4a40;}
+
+    .prose-article h2{font-family:'Space Grotesk',sans-serif;font-size:1.55rem;font-weight:700;margin:2rem 0 1rem;line-height:1.25;color:#1e2a23;}
+    .dark .prose-article h2{color:#e6f0ea;}
+    .prose-article h3{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:600;margin:1.5rem 0 .6rem;line-height:1.3;color:#2D6A4F;}
+    .dark .prose-article h3{color:#409F7A;}
+    .prose-article p{margin:0 0 1.2rem;line-height:1.82;color:#52525b;}
+    .dark .prose-article p{color:#a1a1aa;}
+    .prose-article ul{margin:0 0 1.2rem 1.5rem;list-style:disc;}
+    .prose-article li{margin-bottom:.4rem;line-height:1.7;color:#52525b;}
+    .dark .prose-article li{color:#a1a1aa;}
+    .prose-article blockquote{border-left:3px solid #2D6A4F;padding:.75rem 1.25rem;margin:0 0 1.8rem;background:#e6f0ea;border-radius:0 8px 8px 0;}
+    .dark .prose-article blockquote{background:#1a261f;}
+    .prose-article blockquote p{color:#1e2a23;font-style:italic;margin:0;}
+    .dark .prose-article blockquote p{color:#b0c8ba;}
+    .prose-article img{border-radius:12px;margin:1.5rem 0;}
+
+    .blog-card{transition:transform .28s cubic-bezier(.4,0,.2,1),border-color .18s;}
+    .blog-card:hover{transform:translateY(-4px);border-color:#2D6A4F;}
+
+    [x-cloak]{display:none!important;}
+  </style>
+</head>
+
+<body class="bg-[#f5f9f6] dark:bg-[#121a15] text-zinc-800 dark:text-zinc-100 font-body antialiased">
+
+<!-- ═══ NAV ═══ -->
+<header class="fixed inset-x-0 top-0 z-50 transition-all duration-300"
+  :class="scrolled?'bg-white/90 dark:bg-[#121a15]/90 backdrop-blur-md shadow-sm shadow-black/5':''">
+  <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between" aria-label="Main navigation">
+    <a href="/" class="font-display font-bold text-xl tracking-tight z-10">
+      <span class="text-zinc-900 dark:text-white">Damian </span><span class="text-accent">Boer</span>
+    </a>
+    <ul class="hidden md:flex items-center gap-8 text-sm font-medium">
+      <li><a href="/portfolio.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Portfolio</a></li>
+      <li><a href="/blog.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors on !text-zinc-900 dark:!text-white">Blog</a></li>
+      <li><a href="/cv.html" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">CV</a></li>
+      <li><a href="/#about" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">About</a></li>
+      <li><a href="/#contact" class="nl text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors">Contact</a></li>
+    </ul>
+    <div class="flex items-center gap-3">
+      <button @click="dark=!dark" class="w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors" :aria-label="dark?'Light mode':'Dark mode'">
+        <svg x-show="!dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        <svg x-show="dark" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+      </button>
+      <a href="/#contact" class="hidden md:inline-flex items-center gap-2 shimmer bg-accent text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-accent-light transition-colors">
+        Contact me <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+      <button @click="mobileMenu=!mobileMenu" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-700" :aria-expanded="mobileMenu" aria-label="Toggle menu">
+        <svg x-show="!mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg x-show="mobileMenu" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </nav>
+  <div x-show="mobileMenu" x-cloak x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2" class="md:hidden bg-white dark:bg-[#121a15] border-t border-zinc-100 dark:border-zinc-800">
+    <ul class="flex flex-col px-6 py-5 gap-4 text-sm font-medium">
+      <li><a href="/portfolio.html" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Portfolio</a></li>
+      <li><a href="/blog.html" @click="mobileMenu=false" class="block text-accent font-medium">Blog</a></li>
+      <li><a href="/cv.html" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">CV</a></li>
+      <li><a href="/#about" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">About</a></li>
+      <li><a href="/#contact" @click="mobileMenu=false" class="block text-zinc-700 dark:text-zinc-300 hover:text-accent transition-colors">Contact</a></li>
+      <li class="pt-2 border-t border-zinc-100 dark:border-zinc-800">
+        <a href="/#contact" @click="mobileMenu=false" class="inline-flex shimmer bg-accent text-white font-semibold text-sm px-5 py-2.5 rounded-full">Contact me →</a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<main>
+
+  <!-- ═══ ARTICLE ═══ -->
+  <article class="pt-36 pb-24">
+    <div class="max-w-4xl mx-auto px-6">
+      <!-- Back link -->
+      <a href="/blog.html" class="inline-flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400 hover:text-accent transition-colors mb-6">
+        ← Back to all articles
+      </a>
+
+      <div class="bg-white dark:bg-[#1e2a23] rounded-2xl border border-zinc-100 dark:border-zinc-700 overflow-hidden">
+        <!-- Featured Image -->
+        <div class="photo-frame w-full h-64 md:h-80">
+          <img src="/images/genetic-editing.jpg" alt="Beyond the 'pro or against': what do we want to use Genetic Editing for?" loading="lazy"/>
+        </div>
+
+        <div class="p-6 md:p-8">
+          <!-- Category & Date -->
+          <div class="flex flex-wrap items-center gap-3 mb-4">
+            <span class="text-xs px-2.5 py-1 rounded-full border font-medium tag-accent">Science Communication</span>
+            <span class="text-xs text-zinc-400 dark:text-zinc-500 flex items-center gap-1">
+              <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              <span>2026, August</span>
+            </span>
+            <span class="text-xs text-zinc-400 dark:text-zinc-500 flex items-center gap-1">
+              <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span>7 min read</span>
+            </span>
+          </div>
+
+          <!-- Title -->
+          <h1 class="font-display font-bold text-3xl md:text-4xl text-zinc-900 dark:text-white mb-6">Beyond the "pro or against": what do we want to use Genetic Editing for?</h1>
+
+          <!-- Content -->
+          <div class="prose-article">
+
+            <p><strong>Background:</strong></p>
+            <p>The Caucasus, my summer holiday, 2018. I still remember it well.</p>
+            <p>The end of my Masters in Plant Biotechnology was in sight. At my university, many of my fellow students were applying genetic editing techniques in crops or model species to study the functions of genes. For many of us, it was part of becoming a plant scientist or breeder.</p>
+            <p>However, in Europe, something quite different was happening: the Court of Justice of the European Union (CJEU) was deciding on a question that would have big consequences for the technologies we were learning to use: <em>"Should plants produced using newer mutagenesis techniques, including the emerging new targeted genetic-editing techniques, fall under the EU's existing GMO legislation from 2001?"</em></p>
+
+            <p><strong>Background: Genetic Modification and Genetic Editing: what is the difference?</strong></p>
+            <p>Both conventional Genetic Modification (GM) and New Genomic Techniques (NGTs) can be used to alter an organism's genome. However, NGTs comprise newer techniques that can enable targeted changes to DNA, and in some applications, allow genetic changes to be made without introducing foreign DNA or genetic sequences outside the species conventional breeding gene pool.*</p>
+            <p><em>*The conventional breeding gene pool means the genetic variation that breeders can access by crossing sexually compatible plants. An example from humans would be eye colour: the genetic variation in eye colour genes contributes to our differences in eye colour, that is a part of our gene pool!</em></p>
+
+            <p>Many students and scientists alike experienced the possibilities of the new techniques. They were increasingly accessible, and allowed to target specific regions of the genome to investigate what individual genes do, and how such changes affect plant functioning; its mechanisms and traits. Based on the rapid developments in the technologies, I found it difficult to believe that they could be fitted into legislation from 2001, in which the techniques did not exist yet.</p>
+            <p>Nevertheless, in July 2018, the Court ruled that organisms produced through newer mutagenesis techniques fell within the scope of the existing GMO Directive. The ruling triggered strong reactions. Many scientific organisations criticised the decision, bringing forth arguments about the lack of scientific basis, and that the process of making a plant doesn't reflect the plant itself. Others defended the ruling, saying that newer techniques should be strongly regulated.</p>
+
+            <blockquote>
+              <p>What was the most triggering to me, was that the debate felt so familiar… On a societal level, a deceptively simple, decades-old question that had dominated the genetic modification debate started to resurface:</p>
+              <p><strong>"Are you for or against GMOs?"</strong></p>
+            </blockquote>
+
+            <p>And now this question was being used for genetically edited crops as well. It ultimately set the EU on a tumultuous regulatory path of 8 years to resolve.</p>
+
+            <p><strong>Pro or Against… again?</strong></p>
+            <p>At the time, even as a student with relatively little experience, I felt rather frustrated and fatigued by how little the debate seemed to have evolved. My thoughts were dominated by questions such as: <em>"How is it possible that the debate has not changed?"</em>, <em>"Why is there so much lack of information about genetic editing?"</em>, <em>"Are Plant Scientists really this bad at communicating science?"</em>, <em>"Are there any efforts from 'our side' at all; to connect the parties with tensions about this topic?"</em></p>
+
+            <blockquote>
+              <p>The resurfacing of the old pro versus against debate was for me the biggest reason to start a non-profit: <strong>GeneSprout Initiative</strong>.</p>
+            </blockquote>
+
+            <p>I aimed to create an international organization, made up of the next generation of plant scientists and breeders to be more active in science communication, to provide open-source, educational information, and most importantly; to reconnect people who were on opposite sides of the debate. I wanted the conversation to go further than simply asking whether we should accept or reject the technology: to reflect and ask ourselves some of the overarching, bigger questions, such as:</p>
+
+            <ul>
+              <li><em>What kind of agriculture do we want?</em></li>
+              <li><em>What kind of crops?</em></li>
+              <li><em>And ultimately, what kind of agriculture do we want technological tools to help create?</em></li>
+            </ul>
+
+            <p><strong>Eight years later, a new decision</strong></p>
+            <p>European Union, my summer holiday, June 2026. I still remember it well.</p>
+            <p>In June 2026, the European Union adopted a new regulatory framework for plants produced using the now-called New Genomic Techniques (NGTs)*. The new ruling will be applied in July 2028, so until then, NGT plants remain subject to the existing GMO framework from 2001.</p>
+            <p>The general idea is simple: not all genetically-edited plants will be treated in the same way anymore.</p>
+            <p>The EU now divides them into two categories:</p>
+            <ul>
+              <li><strong>NGT-1:</strong> Plants with limited genetic changes that could also have arisen through conventional breeding. After verification of NGT-1 status, these plants will generally be treated like conventionally bred plants rather than subject to GMO regulation.</li>
+              <li><strong>NGT-2:</strong> Plants with other types of genetic changes. These will remain subject to stricter GMO legislation; although also a modified approach to risk assessment will be performed.</li>
+            </ul>
+            <p><em>The new framework was adopted in 2026 and will apply from July 2028.</em></p>
+
+            <blockquote>
+              <p>So in short: the EU is moving away from treating all plants according to the technology that was used to create them, and more towards considering the (genetic) characteristics of the plant.</p>
+            </blockquote>
+
+            <p>So now, the question: <em>"Will Europe allow the use of genetic editing"</em> is from the past; the technology is coming after all. The more interesting/relevant question is:</p>
+
+            <blockquote>
+              <p><strong>"What are we going to use genetic editing for?"</strong></p>
+            </blockquote>
+
+            <p><strong>So where are we going with genetic editing?</strong></p>
+            <p>With the new regulatory framework being put into practise by 2028, there is a clearer path towards the development ánd commercialization of certain gene-edited crops produced in Europe, which will influence countries around the world.</p>
+            <p>With that, companies, breeding organizations, research institutes, and other stakeholders are actively investing in NGTs and developing applications that could reach the market in the upcoming years. There isn't anything wrong with this per se: in fact investments are necessary if these technologies are to be adapted from laboratories into fields, farms, and our food.</p>
+            <p>However, it does make the questions I was asking myself back in 2018 perhaps more urgent than ever. When a technology becomes accessible and investable, someone starts deciding what it should be used for.</p>
+
+            <blockquote>
+              <p>Companies will most likely focus on pursuing applications that they believe will create value. Research institutes will pursue questions that could attract funding. Breeders will work on traits that farmers are willing to pay for.</p>
+            </blockquote>
+
+            <p>What my concern is, is that if these limited stakeholders are the driving force of determining what applications are being developed, we risk allowing a relatively small group of stakeholders to define what "success" is for everyone else…</p>
+
+            <blockquote>
+              <p>Commercial success is only one measure of success, and there are many other important measures that should not be forgotten.</p>
+            </blockquote>
+
+            <p>Crops can be highly successful without addressing many of our agricultural challenges; new varieties can increase productivity yet can have low positive, or perhaps even negative impact on biodiversity or the resilience of our agricultural systems.</p>
+
+            <blockquote>
+              <p>This is exactly why I believe we should start discussing what we actually consider a successful application of genetic editing(!).</p>
+            </blockquote>
+
+            <p><strong>What do we actually want to edit?</strong></p>
+            <p>Unfortunately, this question is far from easy considering how many stakeholders there are, and how much far-reaching impact agriculture has on the world.</p>
+            <p>Many organizations and companies have aimed, and most likely will use genetic editing for adding an interesting trait such as disease resistance as a successful trait into crops.</p>
+            <p>At first glance, a crop that can resist a disease without relying on pesticides seems like a great success story. But in the long-term, resistance is not necessarily permanent. Pathogens evolve, and the widespread adoption of particular resistance mechanisms can create a selection pressure for pathogens that favours the pathogen strains that can overcome them.</p>
+
+            <blockquote>
+              <p>Although resistant crops sound great, the question is not whether we can make edits to make them resistant — we definitely can!</p>
+            </blockquote>
+
+            <p>In some plant-pathogen interactions, a single nucleotide edit in a resistance gene can be a difference maker in whether a plant can recognize a pathogen or not. With genetic editing, we can make such changes fairly easily, and within the new category of NGT-1.</p>
+
+            <blockquote>
+              <p>The better question is: how should we use genetic editing to develop resistance that remains effective over time? How should we use our new possibilities?</p>
+            </blockquote>
+
+            <p><strong>So… what should success look like?</strong></p>
+            <p>Now that companies, organizations, and institutes are working on developing genetically edited crops, I believe we should consider the status quo, and the future of agriculture:</p>
+
+            <ul>
+              <li>What traits do we want in the crops we (will) grow?</li>
+              <li>Is it improved nutritional value? Better tolerance against drought or other stresses? Could it be lower pesticide use? More efficient nutrient uptake? Or perhaps the classic: more yield? Should we perhaps focus on the crops that have been neglected, and could be more useful in regions that have historically received little attention from breeding?</li>
+              <li>Furthermore, who should benefit from these technologies? If genetic editing can make breeding faster and more accessible, will those benefits reach farmers and consumers who might need them most, or will the technology reinforce current breeding capacity and commercial power?</li>
+            </ul>
+
+            <p><strong>What about biodiversity?</strong></p>
+            <p>Genetic editing could help us make use of valuable genetic diversity, allowing us to create better, more robust crops. But if the technology encourages the widespread adoption of such crops, perhaps farmers will use a small number of highly successful crops, contributing to more uniformity; monocultures.</p>
+
+            <blockquote>
+              <p>The latter already happened during the Green Revolution, which could be a valuable lesson for us(!).</p>
+            </blockquote>
+
+            <p>These questions are political, ecological, economical, and ethical, yet are — in my opinion — necessary to determine the kind of food systems we want to encourage.</p>
+
+            <p><strong>Beyond the technology debate</strong></p>
+            <p>I still think of that summer in the Caucasus sometimes. I was learning how to change plant genomes, and was interested in how these techniques could be used to tell about the functioning of plants. At the same time I felt frustrated that the public and political debates seemed so polarized and stagnant.</p>
+
+            <blockquote>
+              <p>Eight years later, the gap between knowing what a technology does, and what we should actually do with it is perhaps more relevant than ever before.</p>
+            </blockquote>
+
+            <p>The EU has created a new framework, investment into agricultural genetic editing is increasing, and the generation of the first EU-based NGT crops is moving closer to the fields and markets. That means that the window for discussing what we actually want this technology to achieve is right now.</p>
+            <p>Because once investments have been made, markets have developed, and breeding programmes have been set, changing the direction becomes harder. We definitely have to stop asking only: <em>"Are you for or against genetic editing?"</em> and start asking:</p>
+
+            <ul>
+              <li><em>"What problems do we want to solve?"</em></li>
+              <li><em>"Who should benefit?"</em></li>
+              <li><em>"What trade-offs are we willing to accept?"</em></li>
+              <li><em>"What should we choose not to edit (lessons from the past)?"</em></li>
+              <li><em>And perhaps most importantly: <strong>"Who gets to decide what success looks like?"</strong></em></li>
+            </ul>
+
+            <blockquote>
+              <p>Scientists should not answer that question alone. Neither should companies, policymakers, or opponents of the technologies.</p>
+            </blockquote>
+
+            <p>If genetic editing is going to help shape the future of agriculture, then deciding what the future should look like needs to be a conversation we all have together.</p>
+
+            <blockquote>
+              <p>That way, the future of genetic editing in agriculture should not just be defined by what we learn to edit, but by what we choose to value.</p>
+            </blockquote>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Articles -->
+      <div class="mt-12">
+        <h3 class="font-display font-bold text-2xl text-zinc-900 dark:text-white mb-6">More articles</h3>
+        <div class="grid md:grid-cols-3 gap-4">
+          <a href="/blog/intro.html" class="blog-card group bg-white dark:bg-[#1e2a23] rounded-xl overflow-hidden border border-zinc-100 dark:border-zinc-700 hover:border-accent transition-colors block">
+            <div class="photo-frame w-full h-32">
+              <img src="/images/forest.jpg" alt="Introduction" loading="lazy"/>
+            </div>
+            <div class="p-4">
+              <h4 class="font-display font-bold text-sm text-zinc-900 dark:text-white group-hover:text-accent transition-colors">Introduction!</h4>
+              <p class="text-xs text-zinc-400 mt-1">July 20, 2026</p>
+            </div>
+          </a>
+          <!-- Add more related articles as you write them -->
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ═══ CTA ═══ -->
+  <section class="pb-24">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="bg-[#1b3b2f] dark:bg-[#1e2a23] rounded-3xl p-10 md:p-14 text-center relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-accent/30 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-40 h-40 bg-[#7A9E7E]/20 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="relative z-10">
+          <p class="text-xs font-semibold text-accent-light tracking-widest uppercase mb-4">Let's connect</p>
+          <h2 class="font-display font-bold text-3xl md:text-4xl text-white mb-4">Enjoyed this article?</h2>
+          <p class="text-[#b0c8ba] max-w-md mx-auto mb-8">I'm always open to conversations about plant science, biodiversity, and creative communication.</p>
+          <a href="/#contact" class="inline-flex items-center gap-2 shimmer bg-accent text-white font-semibold px-8 py-3.5 rounded-full hover:bg-accent-light transition-colors">Get in touch →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="border-t border-zinc-200 dark:border-zinc-800 bg-[#f5f9f6] dark:bg-[#121a15]">
+  <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <p class="text-sm text-zinc-500 dark:text-zinc-400 font-medium">© <span id="year"></span> Damian Boer. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
