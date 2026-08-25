@@ -246,9 +246,10 @@
 <p class="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
   Both conventional Genetic Modification (GM) and New Genomic Techniques (NGTs) can be used to alter an organism's genome. However, NGTs comprise newer techniques that can enable targeted changes to DNA, and in some applications, allow genetic changes to be made without introducing foreign DNA or genetic sequences outside 
   <span class="text-accent font-semibold cursor-pointer hover:text-accent-light transition-colors" 
-        @click="footnotes.genePool = !footnotes.genePool">
+        @click="footnotes.genePool = !footnotes.genePool"
+        :class="footnotes.genePool ? 'underline decoration-accent underline-offset-2' : ''">
     the species' conventional breeding gene pool.
-    <span x-text="footnotes.genePool ? ' ✕' : ' *'" class="ml-0.5"></span>
+    <span x-text="footnotes.genePool ? ' ✕' : ' *'"></span>
   </span>
 </p>
   <!-- Expandable footnote inside the box -->
